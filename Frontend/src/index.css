@@ -1,0 +1,27 @@
+:root {
+  --primary: #780000;
+  --secondary: #c1121f;
+  --third: rgba(255, 255, 255, 0.8);
+  --fourth: rgba(0, 48, 73, 0.9);
+  --fifth: #669bbc;
+  --sixth: #000000;
+  --seventh: #e43641;
+
+  --background-color: var(--third);
+  --text-color: var(--fourth);
+  --font-family: "Poppins", sans-serif;
+
+  /* Navbar */
+  --navbar-text-color: var(--seventh);
+  --navbar-hover-color: var(--secondary);
+  --navbar-shadow: rgba(0, 0, 0, 0.1);
+  --link-color: var(--third);
+  --link-hover-color: var(--navbar-hover-color);
+  --mobile-link-color: var(--third);
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
