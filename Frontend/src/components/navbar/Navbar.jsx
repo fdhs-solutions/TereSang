@@ -1,19 +1,19 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom"; // Import useLocation
-import AuthHook from "../../auth/AuthHook";
-import Swal from "sweetalert2";
-import "./Navbar.css";
+import { useEffect, useState } from "react";
+import { Modal } from "react-bootstrap";
 import {
-  FaUser,
-  FaTachometerAlt,
-  FaKey,
-  FaSignOutAlt,
   FaHome,
+  FaKey,
   FaSignInAlt,
+  FaSignOutAlt,
+  FaTachometerAlt,
+  FaUser,
   FaUserPlus,
 } from "react-icons/fa"; // Import icons
 import { GiHamburgerMenu } from "react-icons/gi";
-import { Modal } from "react-bootstrap";
+import { Link, useLocation, useNavigate } from "react-router-dom"; // Import useLocation
+import Swal from "sweetalert2";
+import AuthHook from "../../auth/AuthHook";
+import "./Navbar.css";
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -86,7 +86,7 @@ function Navbar() {
         }`}
       >
         <div className="container">
-          <div className="navbar-brand">Marriage Harmony</div>
+          <div className="navbar-brand">TereSang</div>
           <button
             className="navbar-toggler"
             type="button"
@@ -198,7 +198,7 @@ function Navbar() {
 
       <div className={`responsive-sidebar ${menuOpen ? "open" : ""}`}>
         <div className="sidebar-header-wrap">
-          <div className="navbar-brand">Marriage Harmony</div>
+          <div className="navbar-brand">TereSang</div>
           <button className="close-button" onClick={() => setMenuOpen(false)}>
             &times;
           </button>

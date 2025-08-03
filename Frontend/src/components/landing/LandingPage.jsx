@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./landingPage.css";
 
@@ -224,7 +224,7 @@ const LandingPage = () => {
                     ABOUT US
                   </span>
                   <h2 className="text-3xl font-bold text-gray-800 mb-4">
-                    Welcome to the Marriage Harmony
+                    Welcome to the TereSang
                   </h2>
                   <p className="text-gray-600 mb-4">
                     Ready Matrimonial provides decent Matrimonial PHP Script in
@@ -370,7 +370,7 @@ const LandingPage = () => {
                           overflowWrap: "break-word",
                         }}
                       >
-                        intallyshwisdom@gmail.com
+                        fdhssolution@gmail.com
                       </span>
                     </p>
                   </div>
@@ -385,12 +385,12 @@ const LandingPage = () => {
         <div className="text-sm text-dark-900">
           &copy; {new Date().getFullYear()}
           <a
-            href="https://www.marriageharmony.in/"
+            href="https://tereSang.fdhs-solution.com/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-blue-400 hover:text-blue-600 no-underline"
           >
-            Marriage Harmony
+            TereSang
           </a>
           <span className="hidden sm:inline"> | </span>{" "}
           {/* Show separator inline on larger screens */}
