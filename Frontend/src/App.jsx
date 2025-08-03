@@ -1,21 +1,20 @@
+import { Box, Card } from "@mui/material";
 import {
+  Route,
   BrowserRouter as Router,
   Routes,
-  Route,
   useLocation,
 } from "react-router-dom";
-import Registration from "./components/registration/Registration";
-import Login from "./components/login/Login";
-import Navbar from "./components/navbar/Navbar";
-import CardEx from "./components/test/CardEx";
-import FramerCardData from "./components/framer/FramerCardData";
+import ChangePassword from "./components/change-password/ChangePassword";
+import ForgotPassword from "./components/forgot-password/ForgotPassword";
 import DemoCardDetails from "./components/framer/DemoCardDetails";
 import FramerCard from "./components/framer/FramerCard";
-import PrimaryUserDetails from "./components/Profile/primary-user-details/PrimaryUserDetails";
+import FramerCardData from "./components/framer/FramerCardData";
 import LandingPage from "./components/landing/LandingPage";
-import { Box, Card } from "@mui/material";
-import ForgotPassword from "./components/forgot-password/ForgotPassword";
-import ChangePassword from "./components/change-password/ChangePassword";
+import Login from "./components/login/Login";
+import Navbar from "./components/navbar/Navbar";
+import PrimaryUserDetails from "./components/Profile/primary-user-details/PrimaryUserDetails";
+import Registration from "./components/registration/Registration";
 
 const AppContent = () => {
   return (
@@ -36,7 +35,6 @@ const AppContent = () => {
           <Route path="/" element={<LandingPage />} />
           <Route path="/register" element={<Registration />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/card" element={<CardEx />} />
           <Route path="/framer-data" element={<FramerCardData />} />
           <Route path="/profiles" element={<FramerCard />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />

@@ -1,5 +1,7 @@
 export const login = async (req, res) => {
-  return "This function is not implemented yet.";
+  return res
+    .status(200)
+    .json({ message: "Login successful", status: "success" });
 };
 
 export const logout = async (req, res) => {
@@ -7,5 +9,5 @@ export const logout = async (req, res) => {
 };
 
 export const register = async (req, res) => {
-  return "This function is not implemented yet.";
+  return res.status(200).json({ message: "Register successful" });
 };

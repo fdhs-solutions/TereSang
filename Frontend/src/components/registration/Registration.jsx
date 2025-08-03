@@ -1,16 +1,15 @@
-import { useState, useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
-import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import Cropper from "react-easy-crop";
+import axios from "axios";
 import { motion } from "framer-motion";
-import styled from "styled-components";
-import { AiOutlineClose } from "react-icons/ai";
+import { useCallback, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import "./Registration.css";
+import Cropper from "react-easy-crop";
+import { AiFillEye, AiFillEyeInvisible, AiOutlineClose } from "react-icons/ai";
+import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import Swal from "sweetalert2";
 import { ApiUrl } from "../../config/Config";
-import axios from "axios";
+import "./Registration.css";
 
 const FullScreenModal = styled(motion.div)`
   position: fixed;
@@ -340,7 +339,7 @@ function Registration() {
         //   formDataToSend.append("profileImage", profileImageBlob, "profile.jpg");
         // }
 
-        await axios.post(`${ApiUrl}/auth/create-profile`, formDataToSend);
+        await axios.post(`${ApiUrl}/auth/register`, formDataToSend);
 
         setLoading(false);
 

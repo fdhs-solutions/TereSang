@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { AxiosConfig } from "../../config/AxiosConfig";
-import Swal from "sweetalert2";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"; // Import the eye icons
+import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import { AxiosConfig } from "../../config/AxiosConfig";
 
 function Login() {
   const [formData, setFormData] = useState({ mobileNumber: "", password: "" });
@@ -75,10 +75,10 @@ function Login() {
 
     if (validateAll()) {
       try {
-        const response = await AxiosConfig.get("/auth/login-profile", {
+        const response = await AxiosConfig.get("/auth/login", {
           params: formData,
         });
-        if (response?.data?.statusCode === 200) {
+        if (response?.data?.status === "success") {
           localStorage.setItem("userInfo", JSON.stringify(response.data));
 
           Swal.fire({

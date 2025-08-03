@@ -1,5 +1,5 @@
 // Dev Environment
-export const ApiUrl = "http://localhost:9090/api/v1";
+export const ApiUrl = "http://localhost:9090/api";
 
 // Production Environment
 // export const ApiUrl = "https://shaadi-be.fino-web-app.agency/api/v1";
