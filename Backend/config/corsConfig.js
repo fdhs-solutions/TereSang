@@ -1,16 +1,19 @@
 import cors from "cors";
 
+const allowedOrigins = process.env.CORS_ORIGIN?.split(",") || [];
+
 const corsOptions = {
-  origin: "*", // Allow all origins (e.g., localhost, mobile, capacitor, ionic)
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowedHeaders: [
-    "Origin",
-    "X-Requested-With",
-    "Content-Type",
-    "Accept",
-    "Authorization"
-  ],
-  credentials: false,
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // allow requests with no origin
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
 };
 
 export default cors(corsOptions);
