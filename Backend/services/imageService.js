@@ -1,4 +1,4 @@
-import UserImage from "../models/UserImage.js";
+import UserImage from "../models/UserImages.js";
 
 class ImageService {
   async uploadImages(userId, images) {
