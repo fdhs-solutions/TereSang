@@ -1,12 +1,9 @@
 import express from "express";
-import SearchController from "../controllers/searchController.js";
+import { searchUsers } from "../controllers/services/searchService.js";
 
 const router = express.Router();
 
-// Add new search details
-router.post("/", SearchController.add);
-
-// Get all search details
-router.get("/", SearchController.get);
+// GET /search/users
+router.get("/users", searchUsers);
 
 export default router;

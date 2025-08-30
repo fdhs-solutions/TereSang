@@ -1,9 +1,9 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/db.js";
-import UserProfile from "./UserProfile.js";
+import { UserRegistrationProfile } from "./UserRegistrationProfile.js";
 
-const UserImage = sequelize.define(
-  "UserImage",
+export const UserImages = sequelize.define(
+  "UserImages",
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     image1: DataTypes.BLOB("long"),
@@ -20,8 +20,6 @@ const UserImage = sequelize.define(
   { tableName: "user_images" }
 );
 
-// Associations
-UserProfile.hasOne(UserImage, { foreignKey: "userId" });
-UserImage.belongsTo(UserProfile, { foreignKey: "userId" });
-
-export default UserImage;
+// Association with UserRegistrationProfile
+UserRegistrationProfile.hasOne(UserImages, { foreignKey: "userId" });
+UserImages.belongsTo(UserRegistrationProfile, { foreignKey: "userId" });

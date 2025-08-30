@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/db.js";
-import UserProfile from "./UserProfile.js";
+import { UserRegistrationProfile } from "./UserRegistrationProfile.js";
 
-const UserPartnerPreferences = sequelize.define(
+export const UserPartnerPreferences = sequelize.define(
   "UserPartnerPreferences",
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -15,8 +15,10 @@ const UserPartnerPreferences = sequelize.define(
   { tableName: "user_partner_preferences" }
 );
 
-// Association with UserProfile
-UserProfile.hasOne(UserPartnerPreferences, { foreignKey: "userId" });
-UserPartnerPreferences.belongsTo(UserProfile, { foreignKey: "userId" });
-
-export default UserPartnerPreferences;
+// Association with UserRegistrationProfile (matches folder structure)
+UserRegistrationProfile.hasOne(UserPartnerPreferences, {
+  foreignKey: "userId",
+});
+UserPartnerPreferences.belongsTo(UserRegistrationProfile, {
+  foreignKey: "userId",
+});

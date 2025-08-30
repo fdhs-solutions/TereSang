@@ -1,6 +1,6 @@
 # Teresang
 
-### Folder Structure
+### Backend Folder Structure
 
 ```bash
 src/
@@ -20,15 +20,14 @@ src/
 │   ├── UserRegistrationProfile.js
 │   ├── UserRoles.js
 │   └── UserImages.js
-├── dtos/                      # Data Transfer Objects (DTOs)
-│   ├── AuthDataTransferObject.js
-│   ├── UserFamilyDetailsDataTransferObject.js
-│   ├── UserLifeStyleAndEducationDataTransferObject.js
-│   ├── UserPartnerPreferencesDataTransferObject.js
-│   ├── UserPersonalDetailsDataTransferObject.js
-│   ├── UserRegistrationProfileDataTransferObject.js
-│   ├── UserRolesDataTransferObject.js
-│   └── UserImagesDataTransferObject.js
+├── /dtos/
+│   ├── AuthDTOs.js
+|   ├── UserFamilyDTOs.js
+|   ├── UserImageDTOs.js
+|   ├── UserLifeStyleDTOs.js
+|   ├── UserPartnerPreferencesDTOs.js
+|   ├── UserPersonalDetailsDTOs.js
+|   └── ViewProfilesDTOs.js
 ├── controllers/               # Controllers handle requests and responses
 │   ├── services/              # Business logic / service layer
 │   │   ├── AuthService.js

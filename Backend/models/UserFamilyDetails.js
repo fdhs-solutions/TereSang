@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/db.js";
-import UserProfile from "./UserProfile.js";
+import UserRegistrationProfile from "./UserRegistrationProfile.js";
 
 const UserFamilyDetails = sequelize.define(
   "UserFamilyDetails",
@@ -23,7 +23,8 @@ const UserFamilyDetails = sequelize.define(
   { tableName: "user_family_details" }
 );
 
-UserProfile.hasOne(UserFamilyDetails, { foreignKey: "userId" });
-UserFamilyDetails.belongsTo(UserProfile, { foreignKey: "userId" });
+// Association with UserRegistrationProfile
+UserRegistrationProfile.hasOne(UserFamilyDetails, { foreignKey: "userId" });
+UserFamilyDetails.belongsTo(UserRegistrationProfile, { foreignKey: "userId" });
 
 export default UserFamilyDetails;

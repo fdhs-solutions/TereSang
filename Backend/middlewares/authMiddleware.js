@@ -1,44 +1,29 @@
-// middlewares/authMiddleware.js
 import jwt from "jsonwebtoken";
+import { errorResponse } from "../utils/responseHelper.js";
 
-const authMiddleware = (req, res, next) => {
+export const authenticateJWT = (req, res, next) => {
   const authHeader = req.headers.authorization;
-  const token = authHeader?.startsWith("Bearer ")
-    ? authHeader.split(" ")[1]
-    : null;
 
-  if (!token) {
-    return res.status(401).json({
-      statusCode: 401,
-      status: "Unauthorized",
-      timeStamp: new Date().toISOString(),
-      statusMessage: "Token is missing",
-      description: req.originalUrl,
-    });
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return errorResponse(res, "Authorization token missing", [], 401);
   }
 
+  const token = authHeader.split(" ")[1];
+
   try {
-    // Verify JWT and decode payload
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    // Attach user info (you can add role, email, etc. depending on your payload)
-    req.user = {
-      id: decoded.userId || decoded.id || null,
-      mobileNumber: decoded.mobileNumber || null,
-      username: decoded.username || null,
-      deviceId: decoded.deviceId || null,
-    };
-
-    next(); // continue to the next middleware/route
+    req.user = decoded; // attach decoded user info
+    next();
   } catch (err) {
-    return res.status(401).json({
-      statusCode: 401,
-      status: "Unauthorized",
-      timeStamp: new Date().toISOString(),
-      statusMessage: err.message || "Invalid token",
-      description: req.originalUrl,
-    });
+    return errorResponse(res, "Invalid or expired token", [], 401);
   }
 };
 
-export default authMiddleware;
+export const authorizeRoles = (...roles) => {
+  return (req, res, next) => {
+    if (!req.user || !roles.includes(req.user.role)) {
+      return errorResponse(res, "Access denied", [], 403);
+    }
+    next();
+  };
+};

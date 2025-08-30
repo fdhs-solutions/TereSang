@@ -1,11 +1,19 @@
 import express from "express";
-import UserLifeStyleController from "../controllers/userLifeStyleController.js";
+import {
+  createLifeStyle,
+  getLifeStyle,
+  updateLifeStyle,
+} from "../controllers/services/userLifeStyleService.js";
 
 const router = express.Router();
 
-router.post("/:mobileNumber", UserLifeStyleController.save);
-router.get("/", UserLifeStyleController.getAll);
-router.get("/:id", UserLifeStyleController.getById);
-router.put("/:mobileNumber", UserLifeStyleController.update);
+// POST /user-life-style
+router.post("/", createLifeStyle);
+
+// GET /user-life-style/:userId
+router.get("/:userId", getLifeStyle);
+
+// PUT /user-life-style/:userId
+router.put("/:userId", updateLifeStyle);
 
 export default router;

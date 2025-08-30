@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/db.js";
-import UserProfile from "./UserProfile.js";
+import { UserRegistrationProfile } from "./UserRegistrationProfile.js";
 
-const UserLifeStyleAndEducation = sequelize.define(
+export const UserLifeStyleAndEducation = sequelize.define(
   "UserLifeStyleAndEducation",
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -16,8 +16,10 @@ const UserLifeStyleAndEducation = sequelize.define(
   { tableName: "user_life_style_education" }
 );
 
-// Association with UserProfile
-UserProfile.hasOne(UserLifeStyleAndEducation, { foreignKey: "userId" });
-UserLifeStyleAndEducation.belongsTo(UserProfile, { foreignKey: "userId" });
-
-export default UserLifeStyleAndEducation;
+// Association with UserRegistrationProfile
+UserRegistrationProfile.hasOne(UserLifeStyleAndEducation, {
+  foreignKey: "userId",
+});
+UserLifeStyleAndEducation.belongsTo(UserRegistrationProfile, {
+  foreignKey: "userId",
+});

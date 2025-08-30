@@ -1,41 +1,75 @@
-import UserLifeStyleService from "../services/userLifeStyleService.js";
+import {
+  createUserLifeStyleService,
+  getUserLifeStyleService,
+  updateUserLifeStyleService,
+} from "../services/userLifeStyleService.js";
+import {
+  errorResponse,
+  notFoundResponse,
+  successResponse,
+  validationErrorResponse,
+} from "../utils/responseHelper.js";
 
-class UserLifeStyleController {
-  async save(req, res) {
-    try {
-      const result = await UserLifeStyleService.saveDetails(
-        req.body,
-        req.params.mobileNumber
+// Create user lifestyle details
+export const createUserLifeStyle = async (req, res, next) => {
+  try {
+    const payload = req.body;
+    const result = await createUserLifeStyleService(payload);
+    return successResponse(
+      res,
+      "User lifestyle details created successfully",
+      result
+    );
+  } catch (err) {
+    if (err.name === "SequelizeValidationError") {
+      return validationErrorResponse(
+        res,
+        err.errors.map((e) => e.message),
+        "Validation Error"
       );
-      res.status(200).json(result);
-    } catch (err) {
-      res.status(400).json({ error: err.message });
     }
+    return errorResponse(res, err.message || "Server error", [], 500);
   }
+};
 
-  async getAll(req, res) {
-    const page = parseInt(req.query.page) || 0;
-    const size = parseInt(req.query.size) || 10;
-    const result = await UserLifeStyleService.getAllDetails(page, size);
-    res.status(result.status).json(result);
+// Get user lifestyle details
+export const getUserLifeStyle = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const result = await getUserLifeStyleService(userId);
+    if (!result)
+      return notFoundResponse(res, "User lifestyle details not found");
+    return successResponse(
+      res,
+      "User lifestyle details fetched successfully",
+      result
+    );
+  } catch (err) {
+    return errorResponse(res, err.message || "Server error", [], 500);
   }
+};
 
-  async getById(req, res) {
-    const result = await UserLifeStyleService.getDetailsById(req.params.id);
-    res.status(result.status).json(result);
-  }
-
-  async update(req, res) {
-    try {
-      const result = await UserLifeStyleService.updateDetails(
-        req.params.mobileNumber,
-        req.body
+// Update user lifestyle details
+export const updateUserLifeStyle = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const payload = req.body;
+    const result = await updateUserLifeStyleService(userId, payload);
+    if (!result)
+      return notFoundResponse(res, "User lifestyle details not found");
+    return successResponse(
+      res,
+      "User lifestyle details updated successfully",
+      result
+    );
+  } catch (err) {
+    if (err.name === "SequelizeValidationError") {
+      return validationErrorResponse(
+        res,
+        err.errors.map((e) => e.message),
+        "Validation Error"
       );
-      res.status(result.status).json(result);
-    } catch (err) {
-      res.status(400).json({ error: err.message });
     }
+    return errorResponse(res, err.message || "Server error", [], 500);
   }
-}
-
-export default new UserLifeStyleController();
+};

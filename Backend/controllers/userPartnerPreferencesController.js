@@ -1,41 +1,67 @@
-import UserPartnerPreferencesService from "../services/userPartnerPreferencesService.js";
+import {
+  createUserPartnerPreferences as createUserPartnerPreferencesService,
+  getUserPartnerPreferences as getUserPartnerPreferencesService,
+  updateUserPartnerPreferences as updateUserPartnerPreferencesService,
+} from "../services/UserPartnerPreferencesService.js";
+import {
+  errorResponse,
+  notFoundResponse,
+  successResponse,
+  validationErrorResponse,
+} from "../utils/responseHelper.js";
 
-class UserPartnerPreferencesController {
-  async save(req, res) {
-    try {
-      const result = await UserPartnerPreferencesService.savePreferences(
-        req.body,
-        req.params.mobileNumber
+export const createUserPartnerPreferences = async (req, res, next) => {
+  try {
+    const payload = req.body;
+    const result = await createUserPartnerPreferencesService(payload);
+    return successResponse(
+      res,
+      "Partner preferences created successfully",
+      result
+    );
+  } catch (err) {
+    if (err.name === "SequelizeValidationError") {
+      return validationErrorResponse(
+        res,
+        err.errors.map((e) => e.message),
+        "Validation Error"
       );
-      res.status(result.status).json(result);
-    } catch (err) {
-      res.status(400).json({ error: err.message });
     }
+    return errorResponse(res, err.message || "Server error", [], 500);
   }
+};
 
-  async getAll(req, res) {
-    const page = parseInt(req.query.page) || 0;
-    const size = parseInt(req.query.size) || 10;
-    const result = await UserPartnerPreferencesService.getAll(page, size);
-    res.status(result.status).json(result);
-  }
-
-  async getById(req, res) {
-    const result = await UserPartnerPreferencesService.getById(req.params.id);
-    res.status(result.status).json(result);
-  }
-
-  async update(req, res) {
-    try {
-      const result = await UserPartnerPreferencesService.updatePreferences(
-        req.params.mobileNumber,
-        req.body
-      );
-      res.status(result.status).json(result);
-    } catch (err) {
-      res.status(400).json({ error: err.message });
+export const updateUserPartnerPreferences = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const payload = req.body;
+    const result = await updateUserPartnerPreferencesService(id, payload);
+    if (!result) {
+      return notFoundResponse(res, "Partner preferences not found");
     }
+    return successResponse(
+      res,
+      "Partner preferences updated successfully",
+      result
+    );
+  } catch (err) {
+    return errorResponse(res, err.message || "Server error", [], 500);
   }
-}
+};
 
-export default new UserPartnerPreferencesController();
+export const getUserPartnerPreferences = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await getUserPartnerPreferencesService(id);
+    if (!result) {
+      return notFoundResponse(res, "Partner preferences not found");
+    }
+    return successResponse(
+      res,
+      "Partner preferences retrieved successfully",
+      result
+    );
+  } catch (err) {
+    return errorResponse(res, err.message || "Server error", [], 500);
+  }
+};

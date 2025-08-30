@@ -1,7 +1,7 @@
 import {
-  createProfile as createProfileService,
-  login as loginService,
-} from "../services/authenticationService.js";
+  loginUserService,
+  registerUserService,
+} from "../services/authService.js";
 import {
   errorResponse,
   notFoundResponse,
@@ -9,17 +9,11 @@ import {
   validationErrorResponse,
 } from "../utils/responseHelper.js";
 
-// Create Profile Controller
-export const createProfile = async (req, res, next) => {
+// Register User
+export const registerUser = async (req, res, next) => {
   try {
-    const profileImage = req.files?.profileImage?.[0]?.buffer || null;
-    const gallery = req.files?.gallery?.map((f) => f.buffer) || [];
-    const payload = { ...req.body, profileImage, gallery };
-
-    const result = await createProfileService(payload);
-
-    // Assuming createProfileService returns { status: 201, user }
-    return successResponse(res, "Profile created successfully", result);
+    const result = await registerUserService(req.body);
+    return successResponse(res, "User registered successfully", result);
   } catch (err) {
     if (err.name === "SequelizeValidationError") {
       return validationErrorResponse(
@@ -32,11 +26,10 @@ export const createProfile = async (req, res, next) => {
   }
 };
 
-// Login Controller
-export const login = async (req, res, next) => {
+// Login User
+export const loginUser = async (req, res, next) => {
   try {
-    const { mobileNumber, password } = req.query;
-
+    const { mobileNumber, password } = req.body;
     if (!mobileNumber || !password) {
       return validationErrorResponse(res, [
         !mobileNumber && "mobileNumber is required",
@@ -44,9 +37,8 @@ export const login = async (req, res, next) => {
       ]);
     }
 
-    const result = await loginService({ mobileNumber, password });
+    const result = await loginUserService({ mobileNumber, password });
 
-    // Assuming loginService returns { status: 200/401/404, user/message }
     if (result.status === 200) {
       return successResponse(res, "Login successful", result.user);
     } else if (result.status === 404) {

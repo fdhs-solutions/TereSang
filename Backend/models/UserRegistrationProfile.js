@@ -1,11 +1,11 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/db.js";
 
-const UserProfile = sequelize.define(
-  "UserProfile",
+const UserRegistrationProfile = sequelize.define(
+  "UserRegistrationProfile",
   {
-    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true }, // existing PK
-    mobileNumber: { type: DataTypes.STRING, unique: true }, // just UNIQUE
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    mobileNumber: { type: DataTypes.STRING, unique: true },
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
     age: DataTypes.INTEGER,
@@ -25,4 +25,4 @@ const UserProfile = sequelize.define(
   { tableName: "user_registration_profile" }
 );
 
-export default UserProfile;
+export default UserRegistrationProfile;

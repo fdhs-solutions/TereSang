@@ -29,7 +29,7 @@ app.use((req, res) => res.status(404).json({ error: "Not Found" }));
 app.use(errorHandler);
 
 // Start server
-const port = process.env.PORT || 9090;
+const port = process.env.PORT || 7878;
 app.listen(port, () => {
   console.log(`🚀 Server running at http://localhost:${port}/api`);
 });

@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/db.js";
 
-const SearchDetails = sequelize.define(
+export const SearchDetails = sequelize.define(
   "SearchDetails",
   {
     sId: {
@@ -17,5 +17,3 @@ const SearchDetails = sequelize.define(
   },
   { tableName: "search_details" }
 );
-
-export default SearchDetails;

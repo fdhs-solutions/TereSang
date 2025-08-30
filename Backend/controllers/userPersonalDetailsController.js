@@ -1,41 +1,67 @@
-import UserPersonalDetailsService from "../services/userPersonalDetailsService.js";
+import {
+  createUserPersonalDetails as createUserPersonalDetailsService,
+  getUserPersonalDetails as getUserPersonalDetailsService,
+  updateUserPersonalDetails as updateUserPersonalDetailsService,
+} from "../services/UserPersonalDetailsService.js";
+import {
+  errorResponse,
+  notFoundResponse,
+  successResponse,
+  validationErrorResponse,
+} from "../utils/responseHelper.js";
 
-class UserPersonalDetailsController {
-  async save(req, res) {
-    try {
-      const result = await UserPersonalDetailsService.saveDetails(
-        req.body,
-        req.params.mobileNumber
+export const createUserPersonalDetails = async (req, res, next) => {
+  try {
+    const payload = req.body;
+    const result = await createUserPersonalDetailsService(payload);
+    return successResponse(
+      res,
+      "Personal details created successfully",
+      result
+    );
+  } catch (err) {
+    if (err.name === "SequelizeValidationError") {
+      return validationErrorResponse(
+        res,
+        err.errors.map((e) => e.message),
+        "Validation Error"
       );
-      res.status(result.status).json(result);
-    } catch (err) {
-      res.status(400).json({ error: err.message });
     }
+    return errorResponse(res, err.message || "Server error", [], 500);
   }
+};
 
-  async getAll(req, res) {
-    const page = parseInt(req.query.page) || 0;
-    const size = parseInt(req.query.size) || 10;
-    const result = await UserPersonalDetailsService.getAll(page, size);
-    res.status(result.status).json(result);
-  }
-
-  async getById(req, res) {
-    const result = await UserPersonalDetailsService.getById(req.params.id);
-    res.status(result.status).json(result);
-  }
-
-  async update(req, res) {
-    try {
-      const result = await UserPersonalDetailsService.updateDetails(
-        req.params.mobileNumber,
-        req.body
-      );
-      res.status(result.status).json(result);
-    } catch (err) {
-      res.status(400).json({ error: err.message });
+export const updateUserPersonalDetails = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const payload = req.body;
+    const result = await updateUserPersonalDetailsService(id, payload);
+    if (!result) {
+      return notFoundResponse(res, "Personal details not found");
     }
+    return successResponse(
+      res,
+      "Personal details updated successfully",
+      result
+    );
+  } catch (err) {
+    return errorResponse(res, err.message || "Server error", [], 500);
   }
-}
+};
 
-export default new UserPersonalDetailsController();
+export const getUserPersonalDetails = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await getUserPersonalDetailsService(id);
+    if (!result) {
+      return notFoundResponse(res, "Personal details not found");
+    }
+    return successResponse(
+      res,
+      "Personal details retrieved successfully",
+      result
+    );
+  } catch (err) {
+    return errorResponse(res, err.message || "Server error", [], 500);
+  }
+};

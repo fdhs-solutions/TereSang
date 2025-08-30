@@ -1,11 +1,19 @@
 import express from "express";
-import UserPartnerPreferencesController from "../controllers/userPartnerPreferencesController.js";
+import {
+  createPartnerPreferences,
+  getPartnerPreferences,
+  updatePartnerPreferences,
+} from "../controllers/services/userPartnerPreferencesService.js";
 
 const router = express.Router();
 
-router.post("/:mobileNumber", UserPartnerPreferencesController.save);
-router.get("/", UserPartnerPreferencesController.getAll);
-router.get("/:id", UserPartnerPreferencesController.getById);
-router.put("/:mobileNumber", UserPartnerPreferencesController.update);
+// POST /user-partner-preferences
+router.post("/", createPartnerPreferences);
+
+// GET /user-partner-preferences/:userId
+router.get("/:userId", getPartnerPreferences);
+
+// PUT /user-partner-preferences/:userId
+router.put("/:userId", updatePartnerPreferences);
 
 export default router;

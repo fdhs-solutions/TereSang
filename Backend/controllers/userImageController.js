@@ -1,50 +1,43 @@
-import ImageService from "../services/imageService.js";
+import {
+  getUserImagesService,
+  uploadUserImagesService,
+} from "../services/userImageService.js";
+import {
+  errorResponse,
+  notFoundResponse,
+  successResponse,
+  validationErrorResponse,
+} from "../utils/responseHelper.js";
 
-class UserImageController {
-  async upload(req, res) {
-    try {
-      const userId = req.body.userId;
-      const images = Array.from(
-        { length: 10 },
-        (_, i) => req.files[`image${i + 1}`]?.[0]
+// Upload user images
+export const uploadUserImages = async (req, res, next) => {
+  try {
+    const profileImage = req.files?.profileImage?.[0]?.buffer || null;
+    const gallery = req.files?.gallery?.map((f) => f.buffer) || [];
+    const payload = { ...req.body, profileImage, gallery };
+
+    const result = await uploadUserImagesService(payload);
+    return successResponse(res, "User images uploaded successfully", result);
+  } catch (err) {
+    if (err.name === "SequelizeValidationError") {
+      return validationErrorResponse(
+        res,
+        err.errors.map((e) => e.message),
+        "Validation Error"
       );
-      const id = await ImageService.uploadImages(userId, images);
-      res.status(201).json({ success: true, id });
-    } catch (err) {
-      res.status(400).json({ success: false, message: err.message });
     }
+    return errorResponse(res, err.message || "Server error", [], 500);
   }
+};
 
-  async get(req, res) {
-    try {
-      const userId = req.query.userId;
-      const images = await ImageService.getImages(userId);
-      res.status(200).json({ success: true, images });
-    } catch (err) {
-      res.status(400).json({ success: false, message: err.message });
-    }
+// Get user images
+export const getUserImages = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const result = await getUserImagesService(userId);
+    if (!result) return notFoundResponse(res, "User images not found");
+    return successResponse(res, "User images fetched successfully", result);
+  } catch (err) {
+    return errorResponse(res, err.message || "Server error", [], 500);
   }
-
-  async update(req, res) {
-    try {
-      const { userId, index } = req.body;
-      const image = req.file.buffer;
-      await ImageService.updateImage(userId, index, image);
-      res.json({ success: true });
-    } catch (err) {
-      res.status(400).json({ success: false, message: err.message });
-    }
-  }
-
-  async delete(req, res) {
-    try {
-      const { userId, index } = req.body;
-      await ImageService.deleteImage(userId, index);
-      res.json({ success: true });
-    } catch (err) {
-      res.status(400).json({ success: false, message: err.message });
-    }
-  }
-}
-
-export default new UserImageController();
+};
