@@ -78,7 +78,7 @@ function Login() {
         const response = await AxiosConfig.get("/auth/login", {
           params: formData,
         });
-        if (response?.data?.status === "success") {
+        if (response?.data?.status) {
           localStorage.setItem("userInfo", JSON.stringify(response.data));
 
           Swal.fire({

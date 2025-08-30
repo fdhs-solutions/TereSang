@@ -1,16 +1,16 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/db.js";
-import UserRoles from "./UserRoles.js";
 
 const UserProfile = sequelize.define(
   "UserProfile",
   {
-    mobileNumber: { type: DataTypes.STRING, primaryKey: true },
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true }, // existing PK
+    mobileNumber: { type: DataTypes.STRING, unique: true }, // just UNIQUE
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
     age: DataTypes.INTEGER,
     gender: DataTypes.STRING,
-    langKnown: DataTypes.STRING, // store as comma separated or JSON
+    langKnown: DataTypes.STRING,
     password: DataTypes.STRING,
     community: DataTypes.STRING,
     residence: DataTypes.STRING,
@@ -24,9 +24,5 @@ const UserProfile = sequelize.define(
   },
   { tableName: "user_registration_profile" }
 );
-
-// Association
-UserProfile.hasMany(UserRoles, { foreignKey: "mobileNumber" });
-UserRoles.belongsTo(UserProfile, { foreignKey: "mobileNumber" });
 
 export default UserProfile;

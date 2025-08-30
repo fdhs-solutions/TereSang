@@ -1,4 +1,5 @@
 import express from "express";
+import authenticationRoutes from "../../routes/authenticationRoutes.js";
 import searchRoutes from "../../routes/searchRoutes.js";
 import userFamilyRoutes from "../../routes/userFamilyRoutes.js";
 import userImageRoutes from "../../routes/userImageRoutes.js";
@@ -13,6 +14,7 @@ const router = express.Router();
 router.get("/", (req, res) => res.json({ message: "API is live ✅" }));
 
 // Feature routes
+router.use("/auth", authenticationRoutes);
 router.use("/search", searchRoutes);
 router.use("/user-family", userFamilyRoutes);
 router.use("/user-life-style", userLifeStyleRoutes);
