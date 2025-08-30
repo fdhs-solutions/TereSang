@@ -1,9 +1,13 @@
 import cors from "cors";
+import dotenv from "dotenv";
+dotenv.config();
 
 const allowedOrigins = process.env.CORS_ORIGIN?.split(",") || [];
 
 const corsOptions = {
   origin: function (origin, callback) {
+    console.log("🔍 Incoming Origin:", origin);
+    console.log("✅ Allowed Origins:", allowedOrigins);
     if (!origin) return callback(null, true); // allow requests with no origin
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
