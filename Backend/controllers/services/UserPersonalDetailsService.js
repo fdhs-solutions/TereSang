@@ -1,10 +1,19 @@
-import { UserPersonalDetails } from "../../models/UserPersonalDetails.js";
+import UserPersonalDetails from "../../models/UserPersonalDetails.js";
 
+// Create
 export const createPersonalDetailsService = async (payload) => {
-  const newDetails = await UserPersonalDetails.create(payload);
-  return newDetails;
+  return await UserPersonalDetails.create(payload);
 };
 
-export const getPersonalDetailsByUser = async (userId) => {
+// Get by userId
+export const getPersonalDetailsService = async (userId) => {
   return await UserPersonalDetails.findOne({ where: { userId } });
+};
+
+// Update by userId
+export const updatePersonalDetailsService = async (userId, payload) => {
+  const details = await UserPersonalDetails.findOne({ where: { userId } });
+  if (!details) return null;
+  await details.update(payload);
+  return details;
 };

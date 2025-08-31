@@ -1,19 +1,19 @@
 import express from "express";
 import {
-  createPartnerPreferences,
-  getPartnerPreferences,
-  updatePartnerPreferences,
-} from "../controllers/services/userPartnerPreferencesService.js";
+  createUserPartnerPreferences,
+  getUserPartnerPreferences,
+  updateUserPartnerPreferences,
+} from "../controllers/UserPartnerPreferencesController.js";
 
 const router = express.Router();
 
 // POST /user-partner-preferences
-router.post("/", createPartnerPreferences);
+router.post("/", createUserPartnerPreferences);
 
 // GET /user-partner-preferences/:userId
-router.get("/:userId", getPartnerPreferences);
+router.get("/:userId", getUserPartnerPreferences);
 
 // PUT /user-partner-preferences/:userId
-router.put("/:userId", updatePartnerPreferences);
+router.put("/:userId", updateUserPartnerPreferences);
 
 export default router;

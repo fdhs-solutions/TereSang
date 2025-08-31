@@ -1,10 +1,22 @@
-import { UserLifeStyleAndEducation } from "../../models/UserLifeStyleAndEducation.js";
+// services/userLifeStyleService.js
+import UserLifeStyleAndEducation from "../../models/UserLifeStyleAndEducation.js";
 
-export const createLifeStyleService = async (payload) => {
-  const newLifeStyle = await UserLifeStyleAndEducation.create(payload);
-  return newLifeStyle;
+// Create lifestyle details
+export const createUserLifeStyleService = async (payload) => {
+  return await UserLifeStyleAndEducation.create(payload);
 };
 
-export const getLifeStyleByUser = async (userId) => {
+// Get lifestyle details by userId
+export const getUserLifeStyleService = async (userId) => {
   return await UserLifeStyleAndEducation.findOne({ where: { userId } });
+};
+
+// Update lifestyle details by userId
+export const updateUserLifeStyleService = async (userId, payload) => {
+  const lifestyle = await UserLifeStyleAndEducation.findOne({
+    where: { userId },
+  });
+  if (!lifestyle) return null;
+  await lifestyle.update(payload);
+  return lifestyle;
 };

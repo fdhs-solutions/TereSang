@@ -1,7 +1,8 @@
+// models/SearchDetails.js
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/db.js";
 
-export const SearchDetails = sequelize.define(
+const SearchDetails = sequelize.define(
   "SearchDetails",
   {
     sId: {
@@ -17,3 +18,5 @@ export const SearchDetails = sequelize.define(
   },
   { tableName: "search_details" }
 );
+
+export default SearchDetails;

@@ -1,13 +1,13 @@
 import express from "express";
 import {
   getUserImages,
-  uploadImages,
-} from "../controllers/services/userImageService.js";
+  uploadUserImages,
+} from "../controllers/UserImageController.js";
 
 const router = express.Router();
 
 // POST /images/upload
-router.post("/upload", uploadImages);
+router.post("/upload", uploadUserImages);
 
 // GET /images/:userId
 router.get("/:userId", getUserImages);

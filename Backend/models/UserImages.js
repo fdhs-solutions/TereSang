@@ -1,8 +1,9 @@
+// models/UserImages.js
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/db.js";
-import { UserRegistrationProfile } from "./UserRegistrationProfile.js";
+import UserRegistrationProfile from "./UserRegistrationProfile.js";
 
-export const UserImages = sequelize.define(
+const UserImages = sequelize.define(
   "UserImages",
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -23,3 +24,5 @@ export const UserImages = sequelize.define(
 // Association with UserRegistrationProfile
 UserRegistrationProfile.hasOne(UserImages, { foreignKey: "userId" });
 UserImages.belongsTo(UserRegistrationProfile, { foreignKey: "userId" });
+
+export default UserImages;

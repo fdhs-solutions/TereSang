@@ -1,7 +1,8 @@
+// models/UserRoles.js
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/db.js";
 
-export const UserRoles = sequelize.define(
+const UserRoles = sequelize.define(
   "UserRoles",
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -10,3 +11,5 @@ export const UserRoles = sequelize.define(
   },
   { tableName: "user_roles" }
 );
+
+export default UserRoles;

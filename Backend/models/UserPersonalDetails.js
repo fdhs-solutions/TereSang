@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/db.js";
-import { UserRegistrationProfile } from "./UserRegistrationProfile.js";
+import UserRegistrationProfile from "./UserRegistrationProfile.js";
 
-export const UserPersonalDetails = sequelize.define(
+const UserPersonalDetails = sequelize.define(
   "UserPersonalDetails",
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -24,8 +24,10 @@ export const UserPersonalDetails = sequelize.define(
   { tableName: "user_personal_details" }
 );
 
-// Association with UserRegistrationProfile (matches folder structure)
+// Association with UserRegistrationProfile
 UserRegistrationProfile.hasOne(UserPersonalDetails, { foreignKey: "userId" });
 UserPersonalDetails.belongsTo(UserRegistrationProfile, {
   foreignKey: "userId",
 });
+
+export default UserPersonalDetails;

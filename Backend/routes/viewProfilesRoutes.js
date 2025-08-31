@@ -2,7 +2,7 @@ import express from "express";
 import {
   getAllProfiles,
   getProfileById,
-} from "../controllers/services/viewProfilesService.js";
+} from "../controllers/ViewProfilesController.js";
 
 const router = express.Router();
 

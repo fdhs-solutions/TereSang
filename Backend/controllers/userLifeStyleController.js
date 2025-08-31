@@ -1,14 +1,14 @@
 import {
-  createUserLifeStyleService,
-  getUserLifeStyleService,
-  updateUserLifeStyleService,
-} from "../services/userLifeStyleService.js";
-import {
   errorResponse,
   notFoundResponse,
   successResponse,
   validationErrorResponse,
 } from "../utils/responseHelper.js";
+import {
+  createUserLifeStyleService,
+  getUserLifeStyleService,
+  updateUserLifeStyleService,
+} from "./services/userLifeStyleService.js";
 
 // Create user lifestyle details
 export const createUserLifeStyle = async (req, res, next) => {

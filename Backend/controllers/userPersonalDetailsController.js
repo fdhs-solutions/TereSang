@@ -1,19 +1,20 @@
 import {
-  createUserPersonalDetails as createUserPersonalDetailsService,
-  getUserPersonalDetails as getUserPersonalDetailsService,
-  updateUserPersonalDetails as updateUserPersonalDetailsService,
-} from "../services/UserPersonalDetailsService.js";
-import {
   errorResponse,
   notFoundResponse,
   successResponse,
   validationErrorResponse,
 } from "../utils/responseHelper.js";
+import {
+  createPersonalDetailsService,
+  getPersonalDetailsService,
+  updatePersonalDetailsService,
+} from "./services/UserPersonalDetailsService.js";
 
-export const createUserPersonalDetails = async (req, res, next) => {
+// Create
+export const createUserPersonalDetails = async (req, res) => {
   try {
     const payload = req.body;
-    const result = await createUserPersonalDetailsService(payload);
+    const result = await createPersonalDetailsService(payload);
     return successResponse(
       res,
       "Personal details created successfully",
@@ -31,14 +32,14 @@ export const createUserPersonalDetails = async (req, res, next) => {
   }
 };
 
-export const updateUserPersonalDetails = async (req, res, next) => {
+// Update
+export const updateUserPersonalDetails = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { userId } = req.params;
     const payload = req.body;
-    const result = await updateUserPersonalDetailsService(id, payload);
-    if (!result) {
-      return notFoundResponse(res, "Personal details not found");
-    }
+    const result = await updatePersonalDetailsService(userId, payload);
+    if (!result) return notFoundResponse(res, "Personal details not found");
+
     return successResponse(
       res,
       "Personal details updated successfully",
@@ -49,13 +50,13 @@ export const updateUserPersonalDetails = async (req, res, next) => {
   }
 };
 
-export const getUserPersonalDetails = async (req, res, next) => {
+// Get
+export const getUserPersonalDetails = async (req, res) => {
   try {
-    const { id } = req.params;
-    const result = await getUserPersonalDetailsService(id);
-    if (!result) {
-      return notFoundResponse(res, "Personal details not found");
-    }
+    const { userId } = req.params;
+    const result = await getPersonalDetailsService(userId);
+    if (!result) return notFoundResponse(res, "Personal details not found");
+
     return successResponse(
       res,
       "Personal details retrieved successfully",

@@ -1,4 +1,4 @@
-import { UserRegistrationProfile } from "../models/UserRegistrationProfile.js";
+import UserRegistrationProfile from "../models/UserRegistrationProfile.js";
 import {
   errorResponse,
   notFoundResponse,
@@ -6,7 +6,7 @@ import {
 } from "../utils/responseHelper.js";
 
 // Get all user profiles
-export const getAllProfiles = async (req, res, next) => {
+export const getAllProfiles = async (req, res) => {
   try {
     const users = await UserRegistrationProfile.findAll();
     if (!users.length) {
@@ -18,8 +18,22 @@ export const getAllProfiles = async (req, res, next) => {
   }
 };
 
+// Get single user profile by userId
+export const getProfileById = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await UserRegistrationProfile.findByPk(userId);
+    if (!user) {
+      return notFoundResponse(res, "Profile not found");
+    }
+    return successResponse(res, "Profile fetched successfully", user);
+  } catch (err) {
+    return errorResponse(res, err.message || "Server error", [], 500);
+  }
+};
+
 // Get single user profile by mobile number
-export const getProfileByMobileNumber = async (req, res, next) => {
+export const getProfileByMobileNumber = async (req, res) => {
   try {
     const { mobileNumber } = req.params;
     const user = await UserRegistrationProfile.findOne({

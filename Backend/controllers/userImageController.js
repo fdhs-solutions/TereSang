@@ -1,13 +1,13 @@
 import {
-  getUserImagesService,
-  uploadUserImagesService,
-} from "../services/userImageService.js";
-import {
   errorResponse,
   notFoundResponse,
   successResponse,
   validationErrorResponse,
 } from "../utils/responseHelper.js";
+import {
+  getUserImagesService,
+  uploadUserImagesService,
+} from "./services/userImageService.js";
 
 // Upload user images
 export const uploadUserImages = async (req, res, next) => {

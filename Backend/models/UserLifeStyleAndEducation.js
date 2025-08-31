@@ -1,8 +1,9 @@
+// models/UserLifeStyleAndEducation.js
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/db.js";
-import { UserRegistrationProfile } from "./UserRegistrationProfile.js";
+import UserRegistrationProfile from "./UserRegistrationProfile.js"; // default import
 
-export const UserLifeStyleAndEducation = sequelize.define(
+const UserLifeStyleAndEducation = sequelize.define(
   "UserLifeStyleAndEducation",
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -23,3 +24,5 @@ UserRegistrationProfile.hasOne(UserLifeStyleAndEducation, {
 UserLifeStyleAndEducation.belongsTo(UserRegistrationProfile, {
   foreignKey: "userId",
 });
+
+export default UserLifeStyleAndEducation;

@@ -1,10 +1,21 @@
-import { UserPartnerPreferences } from "../../models/UserPartnerPreferences.js";
+import UserPartnerPreferences from "../../models/UserPartnerPreferences.js";
 
+// Create partner preferences
 export const createPartnerPreferencesService = async (payload) => {
-  const newPreferences = await UserPartnerPreferences.create(payload);
-  return newPreferences;
+  return await UserPartnerPreferences.create(payload);
 };
 
-export const getPartnerPreferencesByUser = async (userId) => {
+// Get partner preferences by userId
+export const getUserPartnerPreferencesService = async (userId) => {
   return await UserPartnerPreferences.findOne({ where: { userId } });
+};
+
+// Update partner preferences by userId
+export const updateUserPartnerPreferencesService = async (userId, payload) => {
+  const preferences = await UserPartnerPreferences.findOne({
+    where: { userId },
+  });
+  if (!preferences) return null;
+  await preferences.update(payload);
+  return preferences;
 };

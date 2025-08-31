@@ -1,19 +1,19 @@
 import express from "express";
 import {
-  createPersonalDetails,
-  getPersonalDetails,
-  updatePersonalDetails,
-} from "../controllers/services/userPersonalDetailsService.js";
+  createUserPersonalDetails,
+  getUserPersonalDetails,
+  updateUserPersonalDetails,
+} from "../controllers/UserPersonalDetailsController.js";
 
 const router = express.Router();
 
 // POST /user-personal-details
-router.post("/", createPersonalDetails);
+router.post("/", createUserPersonalDetails);
 
 // GET /user-personal-details/:userId
-router.get("/:userId", getPersonalDetails);
+router.get("/:userId", getUserPersonalDetails);
 
 // PUT /user-personal-details/:userId
-router.put("/:userId", updatePersonalDetails);
+router.put("/:userId", updateUserPersonalDetails);
 
 export default router;

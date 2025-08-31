@@ -1,14 +1,14 @@
 import {
-  createUserFamilyService,
-  getUserFamilyService,
-  updateUserFamilyService,
-} from "../services/userFamilyService.js";
-import {
   errorResponse,
   notFoundResponse,
   successResponse,
   validationErrorResponse,
 } from "../utils/responseHelper.js";
+import {
+  createUserFamilyService,
+  getUserFamilyService,
+  updateUserFamilyService,
+} from "./services/UserFamilyService.js";
 
 // Create Family Details
 export const createUserFamily = async (req, res, next) => {

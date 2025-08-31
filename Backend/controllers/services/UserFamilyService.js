@@ -1,6 +1,6 @@
 import UserFamilyDetails from "../../models/UserFamilyDetails.js";
 
-export const createFamilyDetails = async (payload) => {
+export const createUserFamilyService = async (payload) => {
   const {
     userId,
     fatherName,
@@ -37,6 +37,14 @@ export const createFamilyDetails = async (payload) => {
 
   return newDetails;
 };
-export const getFamilyDetailsByUser = async (userId) => {
+export const getUserFamilyService = async (userId) => {
   return await UserFamilyDetails.findAll({ where: { userId } });
+};
+
+export const updateUserFamilyService = async (userId, payload) => {
+  const familyDetails = await UserFamilyDetails.findOne({ where: { userId } });
+  if (!familyDetails) throw new Error("Family details not found");
+
+  await familyDetails.update(payload);
+  return familyDetails;
 };

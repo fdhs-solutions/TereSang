@@ -1,19 +1,19 @@
 import express from "express";
 import {
-  createFamilyDetails,
-  getFamilyDetails,
-  updateFamilyDetails,
-} from "../controllers/services/userFamilyService.js";
+  createUserFamily,
+  getUserFamily,
+  updateUserFamily,
+} from "../controllers/UserFamilyController.js";
 
 const router = express.Router();
 
 // POST /user-family
-router.post("/", createFamilyDetails);
+router.post("/", createUserFamily);
 
 // GET /user-family/:userId
-router.get("/:userId", getFamilyDetails);
+router.get("/:userId", getUserFamily);
 
 // PUT /user-family/:userId
-router.put("/:userId", updateFamilyDetails);
+router.put("/:userId", updateUserFamily);
 
 export default router;

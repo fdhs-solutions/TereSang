@@ -1,4 +1,4 @@
-import { UserImages } from "../../models/UserImages.js";
+import UserImages from "../../models/UserImages.js";
 
 export const uploadUserImagesService = async (userId, images) => {
   const imageRecords = await Promise.all(
