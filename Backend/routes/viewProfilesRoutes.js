@@ -4,7 +4,7 @@ import {
   getProfileById,
   getProfileByMobileNumber,
   getProfileImageByMobileNumber,
-} from "../controllers/viewProfilesController";
+} from "../controllers/viewProfilesController.js";
 
 const router = express.Router();
 

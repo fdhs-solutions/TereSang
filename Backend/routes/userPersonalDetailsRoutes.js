@@ -3,7 +3,7 @@ import {
   createUserPersonalDetails,
   getUserPersonalDetails,
   updateUserPersonalDetails,
-} from "../controllers/userPersonalDetailsController";
+} from "../controllers/userPersonalDetailsController.js";
 
 const router = express.Router();
 

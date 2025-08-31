@@ -3,7 +3,7 @@ import {
   createUserPartnerPreferences,
   getUserPartnerPreferences,
   updateUserPartnerPreferences,
-} from "../controllers/userPartnerPreferencesController";
+} from "../controllers/userPartnerPreferencesController.js";
 
 const router = express.Router();
 
