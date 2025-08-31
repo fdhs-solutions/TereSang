@@ -8,7 +8,7 @@ import {
   createUserLifeStyleService,
   getUserLifeStyleService,
   updateUserLifeStyleService,
-} from "./services/userLifeStyleService.js";
+} from "./services/UserLifeStyleService.js";
 
 // Create user lifestyle details
 export const createUserLifeStyle = async (req, res, next) => {
