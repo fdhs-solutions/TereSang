@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import UserRegistrationProfile from "../../models/UserRegistrationProfile.js";
 
 // Register User Service
-export const registerUser = async (payload) => {
+export const registerUserService = async (payload) => {
   const {
     firstName,
     lastName,
@@ -11,20 +11,31 @@ export const registerUser = async (payload) => {
     gender,
     dob,
     password,
-    profileImage,
+    confirmPassword,
+    religion,
+    community,
+    residence,
+    mailId, // payload field
+    profileImage, // binary
+    extension, // file extension if uploaded
   } = payload;
 
-  // Check if user exists
+  // ✅ Validate required fields
+  if (!mobileNumber) throw new Error("Mobile number is required");
+  if (!password) throw new Error("Password is required");
+  if (password !== confirmPassword) throw new Error("Passwords do not match");
+
+  // ✅ Check if user exists
   const existingUser = await UserRegistrationProfile.findOne({
     where: { mobileNumber },
   });
   if (existingUser)
     throw new Error("User with this mobile number already exists");
 
-  // Hash password
+  // ✅ Hash password
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  // Create user
+  // ✅ Create user
   const newUser = await UserRegistrationProfile.create({
     firstName,
     lastName,
@@ -33,14 +44,24 @@ export const registerUser = async (payload) => {
     gender,
     dob,
     password: hashedPassword,
+    religion,
+    community,
+    residence,
+    userMailId: mailId, // map payload → model
     profileImage,
+    extension,
+    createdTime: new Date(),
+    updatedTime: new Date(),
   });
 
   return newUser;
 };
 
 // Login User Service
-export const loginUser = async ({ mobileNumber, password }) => {
+export const loginUserService = async ({ mobileNumber, password }) => {
+  if (!mobileNumber || !password)
+    return { status: 400, message: "Mobile number and password are required" };
+
   const user = await UserRegistrationProfile.findOne({
     where: { mobileNumber },
   });

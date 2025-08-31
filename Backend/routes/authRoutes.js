@@ -1,15 +1,13 @@
 import express from "express";
-import {
-  loginUser,
-  registerUser,
-} from "../controllers/services/authService.js";
+import { loginUser, registerUser } from "../controllers/AuthController.js";
+import { uploadSingle } from "../middlewares/uploadMiddleware.js";
 
 const router = express.Router();
 
-// POST /auth/register
-router.post("/register", registerUser);
+// ✅ Register user (with profile image upload)
+router.post("/register", uploadSingle("profileImage"), registerUser);
 
-// POST /auth/login
+// ✅ Login user (no file upload)
 router.post("/login", loginUser);
 
 export default router;

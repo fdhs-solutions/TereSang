@@ -1,13 +1,13 @@
 import {
-  loginUserService,
-  registerUserService,
-} from "../services/authService.js";
-import {
   errorResponse,
   notFoundResponse,
   successResponse,
   validationErrorResponse,
 } from "../utils/responseHelper.js";
+import {
+  loginUserService,
+  registerUserService,
+} from "./services/AuthService.js";
 
 // Register User
 export const registerUser = async (req, res, next) => {
