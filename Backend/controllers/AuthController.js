@@ -1,59 +1,89 @@
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import UserRegistrationProfile from "../models/UserRegistrationProfile.js";
 import {
   errorResponse,
   notFoundResponse,
   successResponse,
   validationErrorResponse,
 } from "../utils/responseHelper.js";
-import {
-  loginUserService,
-  registerUserService,
-} from "./services/AuthService.js";
 
 // Register User
-export const registerUser = async (req, res, next) => {
+export const registerUser = async (req, res) => {
   try {
-    const result = await registerUserService(req.body);
-    return successResponse(res, "User registered successfully", result);
-  } catch (err) {
-    if (err.name === "SequelizeValidationError") {
-      return validationErrorResponse(
+    const { firstName, lastName, mobileNumber, password, confirmPassword } =
+      req.body;
+
+    if (!mobileNumber || !password || !confirmPassword)
+      return validationErrorResponse(res, ["All fields are required"]);
+
+    if (password !== confirmPassword)
+      return validationErrorResponse(res, ["Passwords do not match"]);
+
+    const existingUser = await UserRegistrationProfile.findOne({
+      where: { mobileNumber },
+    });
+    if (existingUser)
+      return errorResponse(
         res,
-        err.errors.map((e) => e.message),
-        "Validation Error"
+        "User with this mobile number already exists",
+        [],
+        400
       );
-    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = await UserRegistrationProfile.create({
+      firstName,
+      lastName,
+      mobileNumber,
+      password: hashedPassword,
+      createdTime: new Date(),
+      updatedTime: new Date(),
+    });
+
+    return successResponse(res, "User registered successfully", {
+      id: newUser.id,
+      mobileNumber,
+    });
+  } catch (err) {
     return errorResponse(res, err.message || "Server error", [], 500);
   }
 };
 
 // Login User
-export const loginUser = async (req, res, next) => {
+export const loginUser = async (req, res) => {
   try {
-    const { mobileNumber, password } = req.query; // ✅ now GET works
+    const { mobileNumber, password } = req.body;
 
-    if (!mobileNumber || !password) {
+    if (!mobileNumber || !password)
       return validationErrorResponse(res, [
-        !mobileNumber && "mobileNumber is required",
-        !password && "password is required",
+        "Mobile number and password are required",
       ]);
-    }
 
-    const result = await loginUserService({ mobileNumber, password });
+    const user = await UserRegistrationProfile.findOne({
+      where: { mobileNumber },
+    });
+    if (!user) return notFoundResponse(res, "User not found");
 
-    if (result.status === 200) {
-      return successResponse(res, "Login successful", result.user);
-    } else if (result.status === 404) {
-      return notFoundResponse(res, result.message || "User not found");
-    } else if (result.status === 401) {
-      return errorResponse(
-        res,
-        result.message || "Invalid credentials",
-        [],
-        401
-      );
-    } else {
-      return errorResponse(res, "Server error", [], 500);
-    }
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return errorResponse(res, "Invalid credentials", [], 401);
+
+    // Generate JWT
+    const token = jwt.sign(
+      { id: user.id, mobileNumber: user.mobileNumber },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    const responseData = {
+      userName: user.firstName,
+      mobileNumber: user.mobileNumber,
+      jwtToken: token,
+      tokenExpirationInMilis: Date.now() + 3600 * 1000, // 1 hour
+    };
+
+    return successResponse(res, "Login successful", responseData);
   } catch (err) {
     return errorResponse(res, err.message || "Server error", [], 500);
   }

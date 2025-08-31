@@ -47,7 +47,7 @@ const FramerCard = () => {
   const pageSize = 10;
 
   const session = AuthHook();
-  const userGender = session.gender;
+  const userGender = session?.gender || "";
 
   const handleMoreDetailsClick = (item) => {
     setLoading(true);

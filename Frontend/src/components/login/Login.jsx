@@ -75,9 +75,9 @@ function Login() {
 
     if (validateAll()) {
       try {
-        const response = await AxiosConfig.get("/auth/login", {
-          params: formData,
-        });
+        // ✅ Send mobileNumber and password in request body
+        const response = await AxiosConfig.post("/auth/login", formData);
+
         if (response?.data?.status) {
           localStorage.setItem("userInfo", JSON.stringify(response.data));
 

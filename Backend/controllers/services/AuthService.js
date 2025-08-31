@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import UserRegistrationProfile from "../../models/UserRegistrationProfile.js";
 
 // Register User Service
@@ -7,49 +8,29 @@ export const registerUserService = async (payload) => {
     firstName,
     lastName,
     mobileNumber,
-    age,
-    gender,
-    dob,
     password,
     confirmPassword,
-    religion,
-    community,
-    residence,
-    mailId, // payload field
-    profileImage, // binary
-    extension, // file extension if uploaded
+    mailId,
   } = payload;
 
-  // ✅ Validate required fields
   if (!mobileNumber) throw new Error("Mobile number is required");
   if (!password) throw new Error("Password is required");
   if (password !== confirmPassword) throw new Error("Passwords do not match");
 
-  // ✅ Check if user exists
   const existingUser = await UserRegistrationProfile.findOne({
     where: { mobileNumber },
   });
   if (existingUser)
     throw new Error("User with this mobile number already exists");
 
-  // ✅ Hash password
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  // ✅ Create user
   const newUser = await UserRegistrationProfile.create({
     firstName,
     lastName,
     mobileNumber,
-    age,
-    gender,
-    dob,
     password: hashedPassword,
-    religion,
-    community,
-    residence,
-    userMailId: mailId, // map payload → model
-    profileImage,
-    extension,
+    userMailId: mailId,
     createdTime: new Date(),
     updatedTime: new Date(),
   });
@@ -70,5 +51,14 @@ export const loginUserService = async ({ mobileNumber, password }) => {
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) return { status: 401, message: "Invalid credentials" };
 
-  return { status: 200, user };
+  // ✅ Generate JWT
+  const payload = {
+    id: user.id,
+    mobileNumber: user.mobileNumber,
+  };
+  const jwtToken = jwt.sign(payload, process.env.JWT_SECRET, {
+    expiresIn: "7d",
+  });
+
+  return { status: 200, user, jwtToken };
 };

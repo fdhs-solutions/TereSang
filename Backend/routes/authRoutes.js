@@ -7,7 +7,7 @@ const router = express.Router();
 // ✅ Register user (with profile image upload)
 router.post("/register", uploadSingle("profileImage"), registerUser);
 
-// ✅ Login user (no file upload)
-router.get("/login", loginUser);
+// ✅ Login user (use POST instead of GET)
+router.post("/login", loginUser);
 
 export default router;

@@ -1,4 +1,5 @@
 import express from "express";
+import { authenticateJWT } from "../../middlewares/authMiddleware.js"; // Import JWT middleware
 import authRoutes from "../../routes/authRoutes.js";
 import searchRoutes from "../../routes/searchRoutes.js";
 import userFamilyRoutes from "../../routes/userFamilyRoutes.js";
@@ -17,31 +18,38 @@ router.get("/", (req, res) => res.json({ message: "API is live ✅" }));
  * Auth routes (Swagger: /auth)
  * - POST /register : Register a new user
  * - POST /login : Login user
+ * No JWT required here
  */
 router.use("/auth", authRoutes);
 
 /**
  * User profile & details routes (Swagger: /user*)
- * - GET /user : View all profiles
- * - GET /user/:id : View single profile
+ * - JWT protected routes
  */
-router.use("/user", viewProfilesRoutes);
-router.use("/user-personal-details", userPersonalDetailsRoutes);
-router.use("/user-partner-preferences", userPartnerPreferencesRoutes);
-router.use("/user-life-style", userLifeStyleRoutes);
-router.use("/user-family", userFamilyRoutes);
+router.use("/user", authenticateJWT, viewProfilesRoutes);
+router.use(
+  "/user-personal-details",
+  authenticateJWT,
+  userPersonalDetailsRoutes
+);
+router.use(
+  "/user-partner-preferences",
+  authenticateJWT,
+  userPartnerPreferencesRoutes
+);
+router.use("/user-life-style", authenticateJWT, userLifeStyleRoutes);
+router.use("/user-family", authenticateJWT, userFamilyRoutes);
 
 /**
  * Image routes (Swagger: /images)
- * - POST /images/upload : Upload profile or gallery images
- * - GET /images/:userId : Fetch user images
+ * - JWT protected
  */
-router.use("/images", userImageRoutes);
+router.use("/images", authenticateJWT, userImageRoutes);
 
 /**
  * Admin/search routes (Swagger: /search)
- * - GET /search/users : Search users by filters
+ * - JWT protected (add roles later if needed)
  */
-router.use("/search", searchRoutes);
+router.use("/search", authenticateJWT, searchRoutes);
 
 export default router;

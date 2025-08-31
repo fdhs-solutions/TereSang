@@ -1,25 +1,34 @@
-import { useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const AuthHook = () => {
   const navigate = useNavigate();
+  const [user, setUser] = useState(null);
 
-  const userDetails = useCallback(() => {
+  useEffect(() => {
     try {
-      let session = JSON.parse(localStorage.getItem("userInfo"));
-      if (new Date(session?.tokenExpirationInMilis) < new Date()) {
+      const session = JSON.parse(localStorage.getItem("userInfo"));
+
+      if (!session) return setUser(null);
+
+      // Check token expiration (optional)
+      if (
+        session.tokenExpirationInMilis &&
+        new Date(session.tokenExpirationInMilis) < new Date()
+      ) {
         localStorage.clear();
         navigate("/login");
+        return setUser(null);
       }
-      return JSON.parse(localStorage.getItem("userInfo"));
-    } catch (err) {
-      console.log("err :", err);
-      return {};
-    }
-    // eslint-disable-next-line
-  }, []);
 
-  return userDetails();
+      setUser(session);
+    } catch (err) {
+      console.error("AuthHook error:", err);
+      setUser(null);
+    }
+  }, [navigate]);
+
+  return user;
 };
 
 export default AuthHook;
