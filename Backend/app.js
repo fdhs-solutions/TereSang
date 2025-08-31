@@ -10,6 +10,10 @@ import { connectDB, sequelize } from "./config/db.js";
 import errorHandler from "./middlewares/errorHandler.js";
 
 const app = express();
+
+// Enable trust proxy for proper client IP detection
+app.set("trust proxy", 1); // trust first proxy
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
