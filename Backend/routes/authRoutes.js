@@ -8,6 +8,6 @@ const router = express.Router();
 router.post("/register", uploadSingle("profileImage"), registerUser);
 
 // ✅ Login user (no file upload)
-router.post("/login", loginUser);
+router.get("/login", loginUser);
 
 export default router;

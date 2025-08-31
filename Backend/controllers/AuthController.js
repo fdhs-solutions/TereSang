@@ -29,7 +29,8 @@ export const registerUser = async (req, res, next) => {
 // Login User
 export const loginUser = async (req, res, next) => {
   try {
-    const { mobileNumber, password } = req.body;
+    const { mobileNumber, password } = req.query; // ✅ now GET works
+
     if (!mobileNumber || !password) {
       return validationErrorResponse(res, [
         !mobileNumber && "mobileNumber is required",
