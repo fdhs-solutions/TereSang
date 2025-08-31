@@ -7,7 +7,7 @@ import {
 import {
   getUserImagesService,
   uploadUserImagesService,
-} from "./services/userImageService.js";
+} from "./services/UserImageService.js";
 
 // Upload user images
 export const uploadUserImages = async (req, res, next) => {
