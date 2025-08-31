@@ -3,7 +3,7 @@ import {
   createUserLifeStyle,
   getUserLifeStyle,
   updateUserLifeStyle,
-} from "../controllers/UserLifeStyleController.js";
+} from "../controllers/userLifeStyleController.js";
 
 const router = express.Router();
 
