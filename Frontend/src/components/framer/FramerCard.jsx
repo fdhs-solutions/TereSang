@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
+import {
+  FaLanguage,
+  FaPrayingHands,
+  FaUser,
+  FaUserCircle,
+  FaUsers,
+  FaVenusMars,
+} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import AuthHook from "../../auth/AuthHook";
 import {
   getAllProfiles,
   getProfileImage,
 } from "../../services/userAllDetailsService";
-import {
-  FaUser,
-  FaPrayingHands,
-  FaVenusMars,
-  FaLanguage,
-  FaUsers,
-  FaUserCircle,
-} from "react-icons/fa";
-import AuthHook from "../../auth/AuthHook";
 import "./Cards.css";
 
 export const fields = [
@@ -65,12 +65,13 @@ const FramerCard = () => {
         size: pageSize,
         gender: userGender,
       });
-      setUserDetails(details?.result || []);
-      setAllUserDetails(details?.result || []);
-      setTotalPages(details?.totalPages || 1);
+      setUserDetails(details?.data?.result || []);
+      setAllUserDetails(details?.data?.result || []);
+      setTotalPages(details?.data?.totalPages || 1);
 
       const images = {};
-      const mobileNumbers = details?.result.map((user) => user.mobileNumber);
+      const mobileNumbers =
+        details?.data?.result?.map((user) => user.mobileNumber) || [];
 
       await Promise.all(
         mobileNumbers.map(async (number) => {
@@ -220,32 +221,32 @@ const FramerCard = () => {
 
               {/* Height Range Filter */}
               {/* <div className="flex mb-3">
-                <select
-                  value={minHeight}
-                  onChange={(e) => setMinHeight(e.target.value)}
-                  className="form-control mr-2 p-2"
-                >
-                  <option value="">Min Height</option>
-                  {[...Array(7)].map((_, i) => (
-                    <option key={i} value={i + 3}>
-                      {i + 3} ft
-                    </option>
-                  ))}
-                </select>
-                <span className="text-2xl mr-2">-</span>
-                <select
-                  value={maxHeight}
-                  onChange={(e) => setMaxHeight(e.target.value)}
-                  className="form-control p-2"
-                >
-                  <option value="">Max Height</option>
-                  {[...Array(7)].map((_, i) => (
-                    <option key={i} value={i + 3}>
-                      {i + 3} ft
-                    </option>
-                  ))}
-                </select>
-              </div> */}
+                  <select
+                    value={minHeight}
+                    onChange={(e) => setMinHeight(e.target.value)}
+                    className="form-control mr-2 p-2"
+                  >
+                    <option value="">Min Height</option>
+                    {[...Array(7)].map((_, i) => (
+                      <option key={i} value={i + 3}>
+                        {i + 3} ft
+                      </option>
+                    ))}
+                  </select>
+                  <span className="text-2xl mr-2">-</span>
+                  <select
+                    value={maxHeight}
+                    onChange={(e) => setMaxHeight(e.target.value)}
+                    className="form-control p-2"
+                  >
+                    <option value="">Max Height</option>
+                    {[...Array(7)].map((_, i) => (
+                      <option key={i} value={i + 3}>
+                        {i + 3} ft
+                      </option>
+                    ))}
+                  </select>
+                </div> */}
 
               {/* Location Filter */}
               <div className="mb-3">

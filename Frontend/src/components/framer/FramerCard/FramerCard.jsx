@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
+import {
+  FaMapMarkerAlt,
+  FaPrayingHands,
+  FaUser,
+  FaUserCircle,
+} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import AuthHook from "../../../auth/AuthHook";
 import {
   getAllProfiles,
   getProfileImage,
 } from "../../../services/userAllDetailsService";
-import {
-  FaUserCircle,
-  FaUser,
-  FaPrayingHands,
-  FaMapMarkerAlt,
-} from "react-icons/fa";
-import AuthHook from "../../../auth/AuthHook";
 import "../Cards.css";
 
 export const fields = [
