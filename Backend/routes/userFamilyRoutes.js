@@ -3,7 +3,7 @@ import {
   createUserFamily,
   getUserFamily,
   updateUserFamily,
-} from "../controllers/UserFamilyController.js";
+} from "../controllers/userFamilyController.js";
 
 const router = express.Router();
 
