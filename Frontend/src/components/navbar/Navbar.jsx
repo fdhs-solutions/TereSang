@@ -8,15 +8,12 @@ import "./Navbar.css";
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeLink, setActiveLink] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const session = AuthHook();
   const navigate = useNavigate();
   const location = useLocation();
-  const [toggleNavbarColor, setToggleNavbarColor] = useState(
-    !!session?.jwtToken
-  );
 
-  useEffect(() => setToggleNavbarColor(!!session?.jwtToken), [session]);
+  // Get auth info from AuthHook
+  const session = AuthHook();
+
   useEffect(() => setActiveLink(location.pathname), [location.pathname]);
 
   const handleLogout = () => {
@@ -34,15 +31,10 @@ function Navbar() {
           "You have been logged out!",
           "success"
         ).then(() => {
-          navigate("/");
+          navigate("/login");
         });
       }
     });
-  };
-
-  const handleProfileClick = () => {
-    if (session?.userName) navigate(`/all-details/${session.userName}`);
-    setMenuOpen(false);
   };
 
   const handleNavigation = (link) => {
@@ -52,102 +44,99 @@ function Navbar() {
   };
 
   return (
-    <>
-      <nav
-        className={`navbar navbar-expand-lg ${
-          toggleNavbarColor ? "nav-bg-white" : "nav-bg-transparent"
-        }`}
-      >
-        <div className="container">
-          <div className="navbar-brand">TereSang</div>
-          <button
-            className="navbar-toggler"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            <GiHamburgerMenu className="navbar-toggler-icon" />
-          </button>
-          <div className={`collapse navbar-collapse ${menuOpen ? "show" : ""}`}>
-            <ul className="navbar-nav ms-auto">
-              {session?.jwtToken ? (
-                <>
-                  <li className="nav-item">
-                    <button
-                      className={`nav-link ${
-                        activeLink === "profile" ? "active" : ""
-                      }`}
-                      onClick={handleProfileClick}
-                    >
-                      My Profile
-                    </button>
-                  </li>
-                  <li className="nav-item">
-                    <button
-                      className={`nav-link ${
-                        activeLink === "/profiles" ? "active" : ""
-                      }`}
-                      onClick={() => handleNavigation("/profiles")}
-                    >
-                      Dashboard
-                    </button>
-                  </li>
-                  <li className="nav-item">
-                    <button
-                      className={`nav-link ${
-                        activeLink === "/change-password" ? "active" : ""
-                      }`}
-                      onClick={() => handleNavigation("/change-password")}
-                    >
-                      Change Password
-                    </button>
-                  </li>
-                  <li className="nav-item">
-                    <button className="nav-link" onClick={handleLogout}>
-                      Logout
-                    </button>
-                  </li>
-                </>
-              ) : (
-                <>
-                  <li className="nav-item">
-                    <Link
-                      className={`nav-link ${
-                        activeLink === "/" ? "active" : ""
-                      }`}
-                      to="/"
-                      onClick={() => handleNavigation("/")}
-                    >
-                      Home
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link
-                      className={`nav-link ${
-                        activeLink === "/login" ? "active" : ""
-                      }`}
-                      to="/login"
-                      onClick={() => handleNavigation("/login")}
-                    >
-                      Login
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link
-                      className={`nav-link ${
-                        activeLink === "/register" ? "active" : ""
-                      }`}
-                      to="/register"
-                      onClick={() => handleNavigation("/register")}
-                    >
-                      Register
-                    </Link>
-                  </li>
-                </>
-              )}
-            </ul>
-          </div>
+    <nav
+      className={`navbar navbar-expand-lg ${
+        session ? "nav-bg-white" : "nav-bg-transparent"
+      }`}
+    >
+      <div className="container">
+        <div className="navbar-brand">TereSang</div>
+        <button
+          className="navbar-toggler"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          <GiHamburgerMenu className="navbar-toggler-icon" />
+        </button>
+
+        <div className={`collapse navbar-collapse ${menuOpen ? "show" : ""}`}>
+          <ul className="navbar-nav ms-auto">
+            {!session ? (
+              <>
+                <li className="nav-item">
+                  <Link
+                    className={`nav-link ${activeLink === "/" ? "active" : ""}`}
+                    to="/"
+                    onClick={() => handleNavigation("/")}
+                  >
+                    Home
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    className={`nav-link ${
+                      activeLink === "/login" ? "active" : ""
+                    }`}
+                    to="/login"
+                    onClick={() => handleNavigation("/login")}
+                  >
+                    Login
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    className={`nav-link ${
+                      activeLink === "/register" ? "active" : ""
+                    }`}
+                    to="/register"
+                    onClick={() => handleNavigation("/register")}
+                  >
+                    Register
+                  </Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="nav-item">
+                  <button
+                    className={`nav-link ${
+                      activeLink === "/profile" ? "active" : ""
+                    }`}
+                    onClick={() => handleNavigation("/profile")}
+                  >
+                    My Profile
+                  </button>
+                </li>
+                <li className="nav-item">
+                  <button
+                    className={`nav-link ${
+                      activeLink === "/profiles" ? "active" : ""
+                    }`}
+                    onClick={() => handleNavigation("/profiles")}
+                  >
+                    Dashboard
+                  </button>
+                </li>
+                <li className="nav-item">
+                  <button
+                    className={`nav-link ${
+                      activeLink === "/change-password" ? "active" : ""
+                    }`}
+                    onClick={() => handleNavigation("/change-password")}
+                  >
+                    Change Password
+                  </button>
+                </li>
+                <li className="nav-item">
+                  <button className="nav-link" onClick={handleLogout}>
+                    Logout
+                  </button>
+                </li>
+              </>
+            )}
+          </ul>
         </div>
-      </nav>
-    </>
+      </div>
+    </nav>
   );
 }
 
