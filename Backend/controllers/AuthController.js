@@ -33,11 +33,17 @@ export const registerUser = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // ✅ Grab the uploaded file from Multer
+    const profileImage = req.file?.buffer || null; // Buffer
+    const extension = req.file?.mimetype || null; // e.g., "image/png"
+
     const newUser = await UserRegistrationProfile.create({
       firstName,
       lastName,
       mobileNumber,
       password: hashedPassword,
+      profileImage, // save image as blob
+      extension, // save MIME type
       createdTime: new Date(),
       updatedTime: new Date(),
     });

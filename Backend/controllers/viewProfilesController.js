@@ -60,24 +60,18 @@ export const getProfileByMobileNumber = async (req, res) => {
 // ✅ Get only profile image by mobile number
 export const getProfileImageByMobileNumber = async (req, res) => {
   try {
-    const { mobileNumber } = req.query; // query param
-    if (!mobileNumber) {
-      return errorResponse(
-        res,
-        "mobileNumber query param is required",
-        [],
-        400
-      );
-    }
+    const { mobileNumber } = req.query;
+    if (!mobileNumber)
+      return res.status(400).send("mobileNumber query param is required");
 
     const user = await getProfileImageByMobileNumberService(mobileNumber);
+    if (!user || !user.profileImage) return res.sendStatus(404);
 
-    if (!user) {
-      return notFoundResponse(res, "Profile not found");
-    }
-
-    return successResponse(res, "Profile image fetched successfully", user);
+    // Send raw image with proper header
+    res.set("Content-Type", "image/jpeg"); // or image/png if your images are PNG
+    res.send(user.profileImage);
   } catch (err) {
-    return errorResponse(res, err.message || "Server error", [], 500);
+    console.error(err);
+    res.sendStatus(500);
   }
 };
