@@ -61,17 +61,42 @@ export const getProfileByMobileNumber = async (req, res) => {
 export const getProfileImageByMobileNumber = async (req, res) => {
   try {
     const { mobileNumber } = req.query;
-    if (!mobileNumber)
-      return res.status(400).send("mobileNumber query param is required");
+    if (!mobileNumber) {
+      return res.status(400).json({
+        status: false,
+        message: "mobileNumber query param is required",
+        errors: [],
+      });
+    }
 
     const user = await getProfileImageByMobileNumberService(mobileNumber);
-    if (!user || !user.profileImage) return res.sendStatus(404);
 
-    // Send raw image with proper header
-    res.set("Content-Type", "image/jpeg"); // or image/png if your images are PNG
+    if (!user) {
+      return res.status(404).json({
+        status: false,
+        message: "User not found",
+        errors: [],
+      });
+    }
+
+    if (!user.profileImage) {
+      // Send default image or null
+      return res.status(200).json({
+        status: true,
+        message: "No profile image uploaded",
+        data: null,
+      });
+    }
+
+    // Send raw image buffer
+    res.set("Content-Type", user.extension || "image/jpeg");
     res.send(user.profileImage);
   } catch (err) {
     console.error(err);
-    res.sendStatus(500);
+    res.status(500).json({
+      status: false,
+      message: "Server error",
+      errors: [err.message],
+    });
   }
 };

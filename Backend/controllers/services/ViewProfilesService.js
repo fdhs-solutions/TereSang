@@ -1,6 +1,7 @@
 import { Op } from "sequelize";
 import UserRegistrationProfile from "../../models/UserRegistrationProfile.js";
 
+// Get all profiles with pagination (exclude profileImage)
 export const getAllProfilesService = async ({
   page = 0,
   size = 10,
@@ -11,11 +12,29 @@ export const getAllProfilesService = async ({
 
   const whereClause = {};
   if (gender) {
-    // Example: exclude same gender, adjust logic as needed
-    whereClause.gender = { [Op.ne]: gender };
+    whereClause.gender = { [Op.ne]: gender }; // exclude same gender if provided
   }
 
   const { rows, count } = await UserRegistrationProfile.findAndCountAll({
+    attributes: [
+      "id",
+      "mobileNumber",
+      "firstName",
+      "lastName",
+      "age",
+      "gender",
+      "langKnown",
+      "community",
+      "residence",
+      "religion",
+      "dob",
+      "userMailId",
+      "extension",
+      "createdTime",
+      "updatedTime",
+      // profileImage is excluded intentionally
+    ],
+
     where: whereClause,
     limit,
     offset,
@@ -28,18 +47,20 @@ export const getAllProfilesService = async ({
   };
 };
 
+// Get profile by ID
 export const getProfileByIdService = async (userId) => {
   return await UserRegistrationProfile.findByPk(userId);
 };
 
+// Get profile by mobile number (full details including image if needed)
 export const getProfileByMobileNumberService = async (mobileNumber) => {
   return await UserRegistrationProfile.findOne({ where: { mobileNumber } });
 };
 
-// ✅ New service for only profile image
+// Get only profile image by mobile number
 export const getProfileImageByMobileNumberService = async (mobileNumber) => {
   const user = await UserRegistrationProfile.findOne({
-    attributes: ["mobileNumber", "profileImage"], // only required fields
+    attributes: ["mobileNumber", "profileImage"], // Only these fields
     where: { mobileNumber },
   });
 

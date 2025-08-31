@@ -1,95 +1,52 @@
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import UserRegistrationProfile from "../models/UserRegistrationProfile.js";
 import {
   errorResponse,
-  notFoundResponse,
   successResponse,
   validationErrorResponse,
 } from "../utils/responseHelper.js";
+import {
+  loginUserService,
+  registerUserService,
+} from "./services/AuthService.js";
 
-// Register User
+// Register Controller
 export const registerUser = async (req, res) => {
   try {
-    const { firstName, lastName, mobileNumber, password, confirmPassword } =
-      req.body;
+    const payload = {
+      ...req.body,
+      profileImage: req.file?.buffer || null,
+      extension: req.file?.mimetype || null,
+    };
 
-    if (!mobileNumber || !password || !confirmPassword)
-      return validationErrorResponse(res, ["All fields are required"]);
-
-    if (password !== confirmPassword)
-      return validationErrorResponse(res, ["Passwords do not match"]);
-
-    const existingUser = await UserRegistrationProfile.findOne({
-      where: { mobileNumber },
-    });
-    if (existingUser)
-      return errorResponse(
-        res,
-        "User with this mobile number already exists",
-        [],
-        400
-      );
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // ✅ Grab the uploaded file from Multer
-    const profileImage = req.file?.buffer || null; // Buffer
-    const extension = req.file?.mimetype || null; // e.g., "image/png"
-
-    const newUser = await UserRegistrationProfile.create({
-      firstName,
-      lastName,
-      mobileNumber,
-      password: hashedPassword,
-      profileImage, // save image as blob
-      extension, // save MIME type
-      createdTime: new Date(),
-      updatedTime: new Date(),
-    });
+    const newUser = await registerUserService(payload);
 
     return successResponse(res, "User registered successfully", {
       id: newUser.id,
-      mobileNumber,
+      mobileNumber: newUser.mobileNumber,
     });
   } catch (err) {
-    return errorResponse(res, err.message || "Server error", [], 500);
+    if (err.message.startsWith("Missing mandatory fields")) {
+      return validationErrorResponse(res, [err.message]);
+    }
+    return errorResponse(res, err.message || "Server error");
   }
 };
 
-// Login User
+// Login Controller
 export const loginUser = async (req, res) => {
   try {
     const { mobileNumber, password } = req.body;
 
-    if (!mobileNumber || !password)
-      return validationErrorResponse(res, [
-        "Mobile number and password are required",
-      ]);
+    const result = await loginUserService({ mobileNumber, password });
 
-    const user = await UserRegistrationProfile.findOne({
-      where: { mobileNumber },
+    if (result.status !== 200)
+      return errorResponse(res, result.message, [], result.status);
+
+    return successResponse(res, "Login successful", {
+      userName: result.user.firstName,
+      mobileNumber: result.user.mobileNumber,
+      jwtToken: result.jwtToken,
+      tokenExpirationInMilis: Date.now() + 7 * 24 * 60 * 60 * 1000, // 7 days
     });
-    if (!user) return notFoundResponse(res, "User not found");
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return errorResponse(res, "Invalid credentials", [], 401);
-
-    // Generate JWT
-    const token = jwt.sign(
-      { id: user.id, mobileNumber: user.mobileNumber },
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" }
-    );
-
-    const responseData = {
-      userName: user.firstName,
-      mobileNumber: user.mobileNumber,
-      jwtToken: token,
-      tokenExpirationInMilis: Date.now() + 3600 * 1000, // 1 hour
-    };
-
-    return successResponse(res, "Login successful", responseData);
   } catch (err) {
     return errorResponse(res, err.message || "Server error", [], 500);
   }
