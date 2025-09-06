@@ -145,7 +145,7 @@ const PrimaryUserDetails = ({
       Object.keys(response).forEach((key) => {
         setValue(key, response[key]);
       });
-    }
+    }        
   }, [response, setValue]);
 
   useEffect(() => {
@@ -380,7 +380,7 @@ const PrimaryUserDetails = ({
   return (
     <>
       <div className="bg-white p-6 rounded-lg shadow-lg mb-6">
-        {mobileNumber === session?.userName && (
+        {mobileNumber === session?.mobileNumber && (
           <div className="text-right mb-4">
             <Button
               variant="primary"
@@ -411,7 +411,7 @@ const PrimaryUserDetails = ({
               >
                 {field.key === "mobileNumber" &&
                 session &&
-                response?.mobileNumber === session.userName
+                response?.mobileNumber === session.mobileNumber
                   ? response.mobileNumber
                   : response?.[field.key] || "N/A"}
               </span>

@@ -11,7 +11,7 @@ const AuthHook = () => {
 
       if (!session) return setUser(null);
 
-      // Check token expiration (optional)
+      // Check token expiration
       if (
         session.tokenExpirationInMilis &&
         new Date(session.tokenExpirationInMilis) < new Date()
@@ -21,7 +21,12 @@ const AuthHook = () => {
         return setUser(null);
       }
 
-      setUser(session);
+      // ✅ Return only session.data so UI doesn’t break
+      setUser({
+        ...session.data, // userName, mobileNumber, etc.
+        jwtToken: session.jwtToken,
+        tokenExpirationInMilis: session.tokenExpirationInMilis,
+      });
     } catch (err) {
       console.error("AuthHook error:", err);
       setUser(null);
