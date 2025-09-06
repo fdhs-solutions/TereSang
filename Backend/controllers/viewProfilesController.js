@@ -8,6 +8,7 @@ import {
   getProfileByIdService,
   getProfileByMobileNumberService,
   getProfileImageByMobileNumberService, // ✅ new service
+  getAllUserDetailsService,
 } from "./services/ViewProfilesService.js";
 
 // Get all profiles with pagination
@@ -57,7 +58,6 @@ export const getProfileByMobileNumber = async (req, res) => {
   }
 };
 
-// ✅ Get only profile image by mobile number
 export const getProfileImageByMobileNumber = async (req, res) => {
   try {
     const { mobileNumber } = req.query;
@@ -98,5 +98,45 @@ export const getProfileImageByMobileNumber = async (req, res) => {
       message: "Server error",
       errors: [err.message],
     });
+  }
+};
+
+// New controller function to get all user details with associated data
+export const getAllUserDetails = async (req, res) => {
+  try {
+    const { mobileNumber } = req.query;
+    if (!mobileNumber) {
+      return res.status(400).json({
+        status: false,
+        message: "mobileNumber query param is required",
+        errors: [],
+      });
+    }
+
+    const userDetails = await getAllUserDetailsService(mobileNumber);
+
+    if (!userDetails) {
+      return res.status(404).json({
+        status: false,
+        message: "User details not found",
+        errors: [],
+      });
+    }
+
+    // Format the response to match frontend expectations
+    const formattedResponse = {
+      response: {
+        ...userDetails.toJSON(), // Spread the main user details
+        userFamilyDetails: userDetails.UserFamilyDetail || null,
+        userPersonalDetails: userDetails.UserPersonalDetail || null,
+        userLifeStyleAndEducation: userDetails.UserLifeStyleAndEducation || null,
+        userPartnerPreferences: userDetails.UserPartnerPreference || null,
+        userImages: userDetails.UserImage || null,
+      }
+    };
+
+    return successResponse(res, "User details fetched successfully", formattedResponse);
+  } catch (err) {
+    return errorResponse(res, err.message || "Server error", [], 500);
   }
 };
