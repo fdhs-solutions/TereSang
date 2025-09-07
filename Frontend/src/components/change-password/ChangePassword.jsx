@@ -3,7 +3,7 @@ import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import AuthHook from "../../auth/AuthHook";
-import { AxiosConfig } from "../../config/AxiosConfig";
+import { ProtectedAxiosConfig } from "../../config/AxiosConfig";
 
 function ChangePassword() {
   const [formData, setFormData] = useState({
@@ -55,15 +55,15 @@ function ChangePassword() {
     }
 
     try {
-      const response = await AxiosConfig.put(
-        `/user/${mobileNumber}/change-password`,
+      const response = await ProtectedAxiosConfig.put(
+        `/auth/change-password`,
         {
           oldPassword: formData.oldPassword,
           newPassword: formData.newPassword,
         }
       );
 
-      if (response.status === 200) {
+      if (response.status) {
         Swal.fire({
           title: "Password Changed Successfully",
           text: "Your password has been updated!",

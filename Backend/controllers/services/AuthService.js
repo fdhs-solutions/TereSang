@@ -99,3 +99,23 @@ export const updatePrimaryDetailsService = async (mobileNumber, payload) => {
 
   return user;
 };
+
+// Change password service
+export const changePasswordService = async (mobileNumber, oldPassword, newPassword) => {
+  const user = await UserRegistrationProfile.findOne({
+    where: { mobileNumber },
+  });
+  if (!user) return { status: 404, message: "User not found" };
+
+  const isMatch = await bcrypt.compare(oldPassword, user.password);
+  if (!isMatch) return { status: 401, message: "Old password is incorrect" };
+
+  const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+  await user.update({
+    password: hashedNewPassword,
+    updatedTime: new Date(),
+  });
+
+  return { status: 200, message: "Password changed successfully" };
+};

@@ -7,6 +7,7 @@ import {
   loginUserService,
   registerUserService,
   updatePrimaryDetailsService,
+  changePasswordService,
 } from "./services/AuthService.js";
 
 // Register Controller
@@ -74,6 +75,28 @@ export const updatePrimaryDetails = async (req, res) => {
       "Primary details updated successfully",
       result
     );
+  } catch (err) {
+    return errorResponse(res, err.message || "Server error", [], 500);
+  }
+};
+
+// Change password
+export const changePassword = async (req, res) => {
+  try {
+    const { oldPassword, newPassword } = req.body;
+    const mobileNumber = req.user.mobileNumber; // From JWT
+
+    if (!oldPassword || !newPassword) {
+      return validationErrorResponse(res, ["Old password and new password are required"]);
+    }
+
+    const result = await changePasswordService(mobileNumber, oldPassword, newPassword);
+
+    if (result.status !== 200) {
+      return errorResponse(res, result.message, [], result.status);
+    }
+
+    return successResponse(res, result.message);
   } catch (err) {
     return errorResponse(res, err.message || "Server error", [], 500);
   }
