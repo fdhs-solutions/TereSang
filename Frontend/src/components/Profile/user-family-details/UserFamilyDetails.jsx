@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import Swal from "sweetalert2";
-import { Modal, Button, Form, Spinner } from "react-bootstrap";
-import AuthHook from "../../../auth/AuthHook";
+import { Button, Form, Modal, Spinner } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import { AxiosConfig } from "../../../config/AxiosConfig";
+import Swal from "sweetalert2";
+import AuthHook from "../../../auth/AuthHook";
+import { ProtectedAxiosConfig } from "../../../config/AxiosConfig";
 
 const familyFields = [
   { key: "fatherName", value: "Father" },
@@ -83,7 +83,7 @@ const UserFamilyDetails = ({
     setLoading(true);
 
     const endpoint = response
-      ? `/update-user-family-details/${mobileNumber}`
+      ? `/user-family/update-user-family-details/${mobileNumber}`
       : `/save-user-family-details?mobileNumber=${mobileNumber}`;
 
     const requestConfig = {
@@ -93,10 +93,11 @@ const UserFamilyDetails = ({
     };
 
     try {
-      const { data } = await AxiosConfig(requestConfig);
+      const { data } = await ProtectedAxiosConfig(requestConfig);
 
       setLoading(false);
-      if (data.status === 200 || data.status === 201) {
+      if (data.status) {
+        // true means success
         setStatus(!status);
         refresAfterUpdate && refresAfterUpdate(!status);
         Swal.fire(
@@ -192,7 +193,7 @@ const UserFamilyDetails = ({
   return (
     <>
       <div className="bg-white p-6 rounded-lg shadow-lg mb-6">
-        {mobileNumber === session?.userName && (
+        {mobileNumber === session?.mobileNumber && (
           <div className="d-flex justify-content-end mb-4">
             <Button
               variant="primary"

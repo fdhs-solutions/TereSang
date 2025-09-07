@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import styled from "styled-components";
-import AuthHook from "../../../auth/AuthHook";
+import { Button, Form, Modal, Spinner } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import Swal from "sweetalert2";
-import { Modal, Button, Form, Spinner } from "react-bootstrap";
 import Select from "react-select"; // Import react-select
+import styled from "styled-components";
+import Swal from "sweetalert2";
+import AuthHook from "../../../auth/AuthHook";
 import { AxiosConfig } from "../../../config/AxiosConfig";
 
 // Styled components
@@ -272,7 +272,7 @@ const UserPersonalDetails = ({ response, setStatus, status }) => {
         transition={{ duration: 0.3 }}
       >
         <div className="d-flex justify-content-end mb-4">
-          {mobileNumber === session?.userName && (
+          {mobileNumber === session?.mobileNumber && (
             <Button
               variant="primary"
               onClick={toggleModal}

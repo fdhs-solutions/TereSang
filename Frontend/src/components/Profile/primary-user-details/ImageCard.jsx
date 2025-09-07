@@ -1,13 +1,13 @@
-import { useEffect, useState, useCallback } from "react";
 import { motion } from "framer-motion";
-import styled from "styled-components";
+import { useCallback, useEffect, useState } from "react";
 import Cropper from "react-easy-crop";
-import { getProfileImage } from "../../../services/userAllDetailsService";
+import { AiOutlineClose } from "react-icons/ai";
+import { FaPencilAlt } from "react-icons/fa";
+import styled from "styled-components";
 import Swal from "sweetalert2";
 import AuthHook from "../../../auth/AuthHook";
-import { FaPencilAlt } from "react-icons/fa";
-import { AiOutlineClose } from "react-icons/ai";
 import { AxiosConfig } from "../../../config/AxiosConfig";
+import { getProfileImage } from "../../../services/userAllDetailsService";
 const CardContainer = styled(motion.div)`
   display: flex;
   border-radius: 8px;
@@ -249,7 +249,7 @@ const ImageCard = ({ mobileNumber, userDetails }) => {
           src={croppedImage || profileImage || "defaultImageUrl.jpg"}
           onClick={() => setFullScreen(true)}
         >
-          {mobileNumber === session?.userName && (
+          {mobileNumber === session?.mobileNumber && (
             <UpdateIconWrapper>
               <UpdateIcon onClick={() => setIsFullScreen(true)} />
               <Tooltip>Edit Image</Tooltip>
