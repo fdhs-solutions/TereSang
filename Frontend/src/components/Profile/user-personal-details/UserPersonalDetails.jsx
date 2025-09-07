@@ -266,13 +266,31 @@ const UserPersonalDetails = ({ response, setStatus, status }) => {
   };
 
   useEffect(() => {
-    setUpdatedProfile({
-      isPersonDisabled: response?.isPersonDisabled || "No",
-      isUserStayingAlone: response?.isUserStayingAlone || "No",
-      ...response,
-    });
-  }, [response]);
+    if (response) {
+      // Convert boolean values to "Yes"/"No" strings for dropdown compatibility
+      const convertBooleanToString = (value) => {
+        if (typeof value === "boolean") {
+          return value ? "Yes" : "No";
+        }
+        return value || "No";
+      };
 
+      // Create a copy of response and convert boolean fields
+      const processedResponse = { ...response };
+      if (processedResponse.isPersonDisabled !== undefined) {
+        processedResponse.isPersonDisabled = convertBooleanToString(processedResponse.isPersonDisabled);
+      }
+      if (processedResponse.isUserStayingAlone !== undefined) {
+        processedResponse.isUserStayingAlone = convertBooleanToString(processedResponse.isUserStayingAlone);
+      }
+
+      setUpdatedProfile({
+        isPersonDisabled: "No",
+        isUserStayingAlone: "No",
+        ...processedResponse,
+      });
+    }
+  }, [response]);
   return (
     <>
       <CardContainer
