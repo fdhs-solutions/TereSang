@@ -1,14 +1,14 @@
-import { useState, useEffect, useCallback } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { useParams } from "react-router-dom";
-import Swal from "sweetalert2";
-import { Modal, Button, Form, Spinner } from "react-bootstrap";
-import AuthHook from "../../../auth/AuthHook";
-import Cropper from "react-easy-crop";
 import { motion } from "framer-motion";
-import styled from "styled-components";
+import { useCallback, useEffect, useState } from "react";
+import { Button, Form, Modal, Spinner } from "react-bootstrap";
+import Cropper from "react-easy-crop";
+import { Controller, useForm } from "react-hook-form";
 import { AiOutlineClose } from "react-icons/ai";
+import { useParams } from "react-router-dom";
 import ReactSelect from "react-select";
+import styled from "styled-components";
+import Swal from "sweetalert2";
+import AuthHook from "../../../auth/AuthHook";
 import { ApiUrl } from "../../../config/Config";
 
 const FullScreenModal = styled(motion.div)`
@@ -92,7 +92,7 @@ const fields = [
     type: "text",
   },
   { label: "Mobile No", key: "mobileNumber", type: "text", isDisabled: true },
-  { label: "Email", key: "mailId", type: "text" },
+  { label: "Email", key: "userMailId", type: "text" },
 ];
 
 // Utility function to convert to PascalCase
@@ -145,7 +145,7 @@ const PrimaryUserDetails = ({
       Object.keys(response).forEach((key) => {
         setValue(key, response[key]);
       });
-    }        
+    }
   }, [response, setValue]);
 
   useEffect(() => {
