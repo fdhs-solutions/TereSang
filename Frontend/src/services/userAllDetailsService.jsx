@@ -8,7 +8,7 @@ export const getAllUserDetails = async (mobileNumber) => {
         params: { mobileNumber },
       }
     );
-    return response.data;
+    return response?.data?.data;
   } catch (error) {
     console.error("Error fetching user details:", error);
     throw error;

@@ -1,17 +1,8 @@
-import React, { useState } from "react";
-import {
-  TextField,
-  Button,
-  Box,
-  Typography,
-  Container,
-  CircularProgress,
-} from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
-import { FaPhone, FaCalendarAlt } from "react-icons/fa"; // Import Font Awesome Icons
 import qs from "qs"; // Import qs for URL encoding
-import { AxiosConfig } from "../../config/AxiosConfig"; // Adjust the path as needed
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2"; // Import SweetAlert
+import { AxiosConfig } from "../../config/AxiosConfig"; // Adjust the path as needed
 
 const ForgotPassword = () => {
   const [formData, setFormData] = useState({
@@ -55,7 +46,7 @@ const ForgotPassword = () => {
         }
       );
 
-      if (response.data.statusCode === 200) {
+      if (response.data.statusCode) {
         Swal.fire({
           title: "Success!",
           text: "Password reset email has been sent to your registered email ID!",

@@ -7,6 +7,7 @@ import {
 import {
   createUserFamilyService,
   getUserFamilyService,
+  updateUserFamilyByMobileService,
   updateUserFamilyService,
 } from "./services/UserFamilyService.js";
 
@@ -48,6 +49,28 @@ export const updateUserFamily = async (req, res, next) => {
   try {
     const { userId } = req.params;
     const result = await updateUserFamilyService(userId, req.body);
+    if (!result) return notFoundResponse(res, "Family details not found");
+    return successResponse(res, "Family details updated successfully", result);
+  } catch (err) {
+    if (err.name === "SequelizeValidationError") {
+      return validationErrorResponse(
+        res,
+        err.errors.map((e) => e.message),
+        "Validation Error"
+      );
+    }
+    return errorResponse(res, err.message || "Server error", [], 500);
+  }
+};
+
+// ✅ New: Update Family Details by Mobile Number
+export const updateUserFamilyByMobile = async (req, res, next) => {
+  try {
+    const { mobileNumber } = req.params;
+    const result = await updateUserFamilyByMobileService(
+      mobileNumber,
+      req.body
+    );
     if (!result) return notFoundResponse(res, "Family details not found");
     return successResponse(res, "Family details updated successfully", result);
   } catch (err) {

@@ -1,15 +1,15 @@
-import { useState, useEffect, useCallback } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { useParams } from "react-router-dom";
-import Swal from "sweetalert2";
-import { Modal, Button, Form, Spinner } from "react-bootstrap";
-import AuthHook from "../../../auth/AuthHook";
-import Cropper from "react-easy-crop";
 import { motion } from "framer-motion";
-import styled from "styled-components";
+import { useCallback, useEffect, useState } from "react";
+import { Button, Form, Modal, Spinner } from "react-bootstrap";
+import Cropper from "react-easy-crop";
+import { Controller, useForm } from "react-hook-form";
 import { AiOutlineClose } from "react-icons/ai";
+import { useParams } from "react-router-dom";
 import ReactSelect from "react-select";
-import { ApiUrl } from "../../../config/Config";
+import styled from "styled-components";
+import Swal from "sweetalert2";
+import AuthHook from "../../../auth/AuthHook";
+import { ProtectedAxiosConfig } from "../../../config/AxiosConfig";
 
 const FullScreenModal = styled(motion.div)`
   position: fixed;
@@ -92,7 +92,7 @@ const fields = [
     type: "text",
   },
   { label: "Mobile No", key: "mobileNumber", type: "text", isDisabled: true },
-  { label: "Email", key: "mailId", type: "text" },
+  { label: "Email", key: "userMailId", type: "text" },
 ];
 
 // Utility function to convert to PascalCase
@@ -230,46 +230,50 @@ const PrimaryUserDetails = ({
     setLoading(true);
 
     const formData = new FormData();
-    Object.keys(data).forEach((key) => formData.append(key, data[key]));
+    // Exclude image-related fields from data to prevent sending existing image data
+    const imageFields = ["profileImage", "existingProfileImage"];
+    Object.keys(data).forEach((key) => {
+      if (!imageFields.includes(key)) {
+        formData.append(key, data[key]);
+      }
+    });
 
-    // Attach the binary blob directly to FormData
-    if (profileImageBlob)
+    // Only attach profileImage if there's a new image blob
+    if (profileImageBlob) {
       formData.append("profileImage", profileImageBlob, "profile.jpg");
+    }
+    // If no new image blob, don't send any profileImage field - backend will preserve existing image
 
-    fetch(`${ApiUrl}/auth/update-profile`, {
-      method: "PUT",
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setLoading(false);
-        if (data.status === 200 || data.status === 201) {
-          setStatus(!status);
-          refresAfterUpdate && refresAfterUpdate(!status);
-          Swal.fire(
-            "Success!",
-            "Profile updated successfully!",
-            "success"
-          ).then(() => {
-            setIsModalOpen(false);
-            window.location.reload();
-          });
-        } else {
-          Swal.fire(
-            "Error!",
-            "Failed to update profile. Please try again.",
-            "error"
-          );
-        }
-      })
-      .catch(() => {
-        setLoading(false);
+    try {
+      const response = await ProtectedAxiosConfig.put("/auth/update-profile", formData);
+
+      setLoading(false);
+      if (response.status === 200 || response.status === 201) {
+        setStatus(!status);
+        refresAfterUpdate && refresAfterUpdate(!status);
+        Swal.fire(
+          "Success!",
+          "Profile updated successfully!",
+          "success"
+        ).then(() => {
+          setIsModalOpen(false);
+          window.location.reload();
+        });
+      } else {
         Swal.fire(
           "Error!",
           "Failed to update profile. Please try again.",
           "error"
         );
-      });
+      }
+    } catch (error) {
+      setLoading(false);
+      Swal.fire(
+        "Error!",
+        "Failed to update profile. Please try again.",
+        "error"
+      );
+    }
   };
   // Calculate age based on DOB
   const calculateAge = (dob) => {
@@ -380,7 +384,7 @@ const PrimaryUserDetails = ({
   return (
     <>
       <div className="bg-white p-6 rounded-lg shadow-lg mb-6">
-        {mobileNumber === session?.userName && (
+        {mobileNumber === session?.mobileNumber && (
           <div className="text-right mb-4">
             <Button
               variant="primary"
@@ -411,7 +415,7 @@ const PrimaryUserDetails = ({
               >
                 {field.key === "mobileNumber" &&
                 session &&
-                response?.mobileNumber === session.userName
+                response?.mobileNumber === session.mobileNumber
                   ? response.mobileNumber
                   : response?.[field.key] || "N/A"}
               </span>

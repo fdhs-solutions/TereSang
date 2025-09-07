@@ -11,7 +11,10 @@ ProtectedAxiosConfig.interceptors.request.use(
     const token = JSON.parse(localStorage.getItem("userInfo"))?.data?.jwtToken;
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
-      config.headers["Content-Type"] = "application/json";
+      // Don't set Content-Type for FormData, let Axios handle it
+      if (!(config.data instanceof FormData)) {
+        config.headers["Content-Type"] = "application/json";
+      }
     }
     return config;
   },

@@ -78,3 +78,44 @@ export const loginUserService = async ({ mobileNumber, password }) => {
 
   return { status: 200, user, jwtToken };
 };
+
+// Update primary details service
+export const updatePrimaryDetailsService = async (mobileNumber, payload) => {
+  const user = await UserRegistrationProfile.findOne({
+    where: { mobileNumber },
+  });
+  if (!user) return null;
+
+  // If password is being updated, hash it
+  if (payload.password) {
+    payload.password = await bcrypt.hash(payload.password, 10);
+  }
+
+  // Update the user
+  await user.update({
+    ...payload,
+    updatedTime: new Date(),
+  });
+
+  return user;
+};
+
+// Change password service
+export const changePasswordService = async (mobileNumber, oldPassword, newPassword) => {
+  const user = await UserRegistrationProfile.findOne({
+    where: { mobileNumber },
+  });
+  if (!user) return { status: 404, message: "User not found" };
+
+  const isMatch = await bcrypt.compare(oldPassword, user.password);
+  if (!isMatch) return { status: 401, message: "Old password is incorrect" };
+
+  const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+  await user.update({
+    password: hashedNewPassword,
+    updatedTime: new Date(),
+  });
+
+  return { status: 200, message: "Password changed successfully" };
+};

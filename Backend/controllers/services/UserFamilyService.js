@@ -1,4 +1,5 @@
 import UserFamilyDetails from "../../models/UserFamilyDetails.js";
+import UserRegistrationProfile from "../../models/UserRegistrationProfile.js";
 
 export const createUserFamilyService = async (payload) => {
   const {
@@ -37,6 +38,7 @@ export const createUserFamilyService = async (payload) => {
 
   return newDetails;
 };
+
 export const getUserFamilyService = async (userId) => {
   return await UserFamilyDetails.findAll({ where: { userId } });
 };
@@ -46,5 +48,30 @@ export const updateUserFamilyService = async (userId, payload) => {
   if (!familyDetails) throw new Error("Family details not found");
 
   await familyDetails.update(payload);
+  return familyDetails;
+};
+
+// ✅ New: Update Family Details by Mobile Number
+export const updateUserFamilyByMobileService = async (
+  mobileNumber,
+  payload
+) => {
+  const user = await UserRegistrationProfile.findOne({
+    where: { mobileNumber },
+  });
+  if (!user) throw new Error("User not found");
+
+  let familyDetails = await UserFamilyDetails.findOne({
+    where: { userId: user.id },
+  });
+  if (!familyDetails) {
+    familyDetails = await UserFamilyDetails.create({
+      ...payload,
+      userId: user.id,
+    });
+  } else {
+    await familyDetails.update(payload);
+  }
+
   return familyDetails;
 };

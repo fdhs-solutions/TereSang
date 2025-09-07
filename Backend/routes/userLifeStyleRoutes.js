@@ -13,7 +13,7 @@ router.post("/", createUserLifeStyle);
 // GET /user-life-style/:userId
 router.get("/:userId", getUserLifeStyle);
 
-// PUT /user-life-style/:userId
-router.put("/:userId", updateUserLifeStyle);
+// PUT /user-life-style/:mobileNumber
+router.put("/:mobileNumber", updateUserLifeStyle);
 
 export default router;

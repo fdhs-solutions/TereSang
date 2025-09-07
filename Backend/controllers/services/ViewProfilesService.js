@@ -1,5 +1,10 @@
 import { Op } from "sequelize";
 import UserRegistrationProfile from "../../models/UserRegistrationProfile.js";
+import UserPersonalDetails from "../../models/UserPersonalDetails.js";
+import UserFamilyDetails from "../../models/UserFamilyDetails.js";
+import UserLifeStyleAndEducation from "../../models/UserLifeStyleAndEducation.js";
+import UserPartnerPreferences from "../../models/UserPartnerPreferences.js";
+import UserImages from "../../models/UserImages.js";
 
 // Get all profiles with pagination (exclude profileImage)
 export const getAllProfilesService = async ({
@@ -70,4 +75,18 @@ export const getProfileImageByMobileNumberService = async (mobileNumber) => {
     mobileNumber: user.mobileNumber,
     profileImage: user.profileImage || null,
   };
+};
+
+// New service to get all user details with associated data
+export const getAllUserDetailsService = async (mobileNumber) => {
+  return await UserRegistrationProfile.findOne({
+    where: { mobileNumber },
+    include: [
+      { model: UserPersonalDetails, as: "UserPersonalDetail" },
+      { model: UserFamilyDetails, as: "UserFamilyDetail" },
+      { model: UserLifeStyleAndEducation, as: "UserLifeStyleAndEducation" },
+      { model: UserPartnerPreferences, as: "UserPartnerPreference" },
+      { model: UserImages, as: "UserImage" },
+    ],
+  });
 };

@@ -1,13 +1,13 @@
-import { useEffect, useState, useCallback } from "react";
 import { motion } from "framer-motion";
-import styled from "styled-components";
+import { useCallback, useEffect, useState } from "react";
 import Cropper from "react-easy-crop";
-import { getProfileImage } from "../../../services/userAllDetailsService";
+import { AiOutlineClose } from "react-icons/ai";
+import { FaPencilAlt } from "react-icons/fa";
+import styled from "styled-components";
 import Swal from "sweetalert2";
 import AuthHook from "../../../auth/AuthHook";
-import { FaPencilAlt } from "react-icons/fa";
-import { AiOutlineClose } from "react-icons/ai";
-import { AxiosConfig } from "../../../config/AxiosConfig";
+import { ProtectedAxiosConfig } from "../../../config/AxiosConfig";
+import { getProfileImage } from "../../../services/userAllDetailsService";
 const CardContainer = styled(motion.div)`
   display: flex;
   border-radius: 8px;
@@ -208,15 +208,16 @@ const ImageCard = ({ mobileNumber, userDetails }) => {
       const formData = new FormData();
       formData.append("profileImage", imageBlob);
 
+      // Only append primitive values to FormData, convert objects/arrays to JSON
       Object.entries(userDetails.response).forEach(([key, value]) => {
-        formData.append(key, value);
+        if (typeof value === "object" && value !== null) {
+          formData.append(key, JSON.stringify(value));
+        } else {
+          formData.append(key, value);
+        }
       });
 
-      const res = await AxiosConfig.put("/auth/update-profile", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const res = await ProtectedAxiosConfig.put("/auth/update-profile", formData);
 
       if (res.status === 200 || res.status === 201) {
         await Swal.fire("Success!", "Profile updated successfully!", "success");
@@ -249,7 +250,7 @@ const ImageCard = ({ mobileNumber, userDetails }) => {
           src={croppedImage || profileImage || "defaultImageUrl.jpg"}
           onClick={() => setFullScreen(true)}
         >
-          {mobileNumber === session?.userName && (
+          {mobileNumber === session?.mobileNumber && (
             <UpdateIconWrapper>
               <UpdateIcon onClick={() => setIsFullScreen(true)} />
               <Tooltip>Edit Image</Tooltip>

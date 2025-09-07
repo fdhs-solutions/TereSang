@@ -4,6 +4,7 @@ import {
   getProfileById,
   getProfileByMobileNumber,
   getProfileImageByMobileNumber,
+  getAllUserDetails,
 } from "../controllers/viewProfilesController.js";
 
 const router = express.Router();
@@ -16,6 +17,9 @@ router.get("/profile-image", getProfileImageByMobileNumber);
 
 // GET /api/user/mobile/:mobileNumber
 router.get("/mobile/:mobileNumber", getProfileByMobileNumber);
+
+// GET /api/user/get-user-all-details
+router.get("/get-user-all-details", getAllUserDetails);
 
 // GET /api/user/:userId (must always be last!)
 router.get("/:userId", getProfileById);

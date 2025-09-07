@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import { AxiosConfig } from "../../config/AxiosConfig";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import AuthHook from "../../auth/AuthHook";
+import { ProtectedAxiosConfig } from "../../config/AxiosConfig";
 
 function ChangePassword() {
   const [formData, setFormData] = useState({
@@ -22,7 +22,7 @@ function ChangePassword() {
 
   // Get the user session
   const session = AuthHook();
-  const mobileNumber = session?.userName; // Use the userName from the session
+  const mobileNumber = session?.mobileNumber; // Use the userName from the session
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -55,15 +55,15 @@ function ChangePassword() {
     }
 
     try {
-      const response = await AxiosConfig.put(
-        `/user/${mobileNumber}/change-password`,
+      const response = await ProtectedAxiosConfig.put(
+        `/auth/change-password`,
         {
           oldPassword: formData.oldPassword,
           newPassword: formData.newPassword,
         }
       );
 
-      if (response.status === 200) {
+      if (response.status) {
         Swal.fire({
           title: "Password Changed Successfully",
           text: "Your password has been updated!",

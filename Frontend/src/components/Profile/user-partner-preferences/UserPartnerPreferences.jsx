@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import Swal from "sweetalert2";
-import { Button, Modal, Form, Spinner, Alert } from "react-bootstrap";
-import AuthHook from "../../../auth/AuthHook";
+import { Alert, Button, Form, Modal, Spinner } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import styled from "styled-components";
 import Select from "react-select";
-import { AxiosConfig } from "../../../config/AxiosConfig";
+import styled from "styled-components";
+import Swal from "sweetalert2";
+import AuthHook from "../../../auth/AuthHook";
+import { ProtectedAxiosConfig } from "../../../config/AxiosConfig";
 
 const CardContainer = styled.div`
   &:hover {
@@ -110,10 +110,10 @@ const UserPartnerPreferences = ({
     };
 
     try {
-      const { data } = await AxiosConfig(requestConfig);
+      const { data } = await ProtectedAxiosConfig(requestConfig);
       setLoading(false);
 
-      if (data.status === 200 || data.status === 201) {
+      if (data.status) {
         setStatus(!status);
         refresAfterUpdate && refresAfterUpdate(!status);
         Swal.fire(
@@ -172,7 +172,7 @@ const UserPartnerPreferences = ({
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.3 }}
       >
-        {mobileNumber === session?.userName && (
+        {mobileNumber === session?.mobileNumber && (
           <div className="d-flex justify-content-end mb-2">
             <Button
               variant="primary"

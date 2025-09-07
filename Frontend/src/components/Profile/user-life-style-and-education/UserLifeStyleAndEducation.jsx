@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { Button, Modal, Form, Spinner, Alert } from "react-bootstrap";
+import { Alert, Button, Form, Modal, Spinner } from "react-bootstrap";
+import { useParams } from "react-router-dom";
+import Select from "react-select";
+import styled from "styled-components";
 import Swal from "sweetalert2";
 import AuthHook from "../../../auth/AuthHook";
-import { useParams } from "react-router-dom";
-import styled from "styled-components";
-import Select from "react-select";
-import { AxiosConfig } from "../../../config/AxiosConfig";
+import { ProtectedAxiosConfig } from "../../../config/AxiosConfig";
 
 const CardContainer = styled.div`
   &:hover {
@@ -89,10 +89,10 @@ const UserLifeStyleAndEducation = ({
     };
 
     try {
-      const { data } = await AxiosConfig(requestConfig);
+      const { data } = await ProtectedAxiosConfig(requestConfig);
       setLoading(false);
 
-      if (data.status === 200 || data.status === 201) {
+      if (data.status) {
         setStatus(!status);
         refresAfterUpdate && refresAfterUpdate(!status);
         Swal.fire(
@@ -151,7 +151,7 @@ const UserLifeStyleAndEducation = ({
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.3 }}
       >
-        {mobileNumber === session?.userName && (
+        {mobileNumber === session?.mobileNumber && (
           <div className="d-flex justify-content-end mb-4">
             <Button
               variant="primary"
@@ -214,8 +214,8 @@ const UserLifeStyleAndEducation = ({
             <Modal.Title>
               <i className="fas fa-user-edit me-2"></i>
               {response
-                ? "Update Lifestyle and Education Details"
-                : "Add Lifestyle and Education Details"}
+                ? "Update Lifestyle and Education"
+                : "Add Lifestyle and Education"}
             </Modal.Title>
           </Modal.Header>
           <Modal.Body

@@ -5,8 +5,8 @@ import searchRoutes from "../../routes/searchRoutes.js";
 import userFamilyRoutes from "../../routes/userFamilyRoutes.js";
 import userImageRoutes from "../../routes/userImageRoutes.js";
 import userLifeStyleRoutes from "../../routes/userLifeStyleRoutes.js";
-import userPartnerPreferencesRoutes from "../../routes/userPartnerPreferencesRoutes.js";
 import userPersonalDetailsRoutes from "../../routes/userPersonalDetailsRoutes.js";
+import userPartnerPreferencesRoutes from "../../routes/userPartnerPreferencesRoutes.js";
 import viewProfilesRoutes from "../../routes/viewProfilesRoutes.js";
 
 const router = express.Router();
@@ -28,17 +28,14 @@ router.use("/auth", authRoutes);
  */
 router.use("/user", authenticateJWT, viewProfilesRoutes);
 router.use(
-  "/user-personal-details",
+  "/update-user-personal-details",
   authenticateJWT,
   userPersonalDetailsRoutes
 );
-router.use(
-  "/user-partner-preferences",
-  authenticateJWT,
-  userPartnerPreferencesRoutes
-);
-router.use("/user-life-style", authenticateJWT, userLifeStyleRoutes);
+
+router.use("/update-user-life-style-details", authenticateJWT, userLifeStyleRoutes);
 router.use("/user-family", authenticateJWT, userFamilyRoutes);
+router.use("/update-user-partner-preferences", authenticateJWT, userPartnerPreferencesRoutes);
 
 /**
  * Image routes (Swagger: /images)

@@ -101,7 +101,7 @@ function Navbar() {
                     className={`nav-link ${
                       activeLink === "/profile" ? "active" : ""
                     }`}
-                    onClick={() => handleNavigation("/profile")}
+                    onClick={() => handleNavigation(`/all-details/${session.mobileNumber}`)}
                   >
                     My Profile
                   </button>

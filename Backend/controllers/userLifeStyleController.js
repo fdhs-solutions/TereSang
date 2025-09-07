@@ -52,9 +52,9 @@ export const getUserLifeStyle = async (req, res, next) => {
 // Update user lifestyle details
 export const updateUserLifeStyle = async (req, res, next) => {
   try {
-    const { userId } = req.params;
+    const { mobileNumber } = req.params;
     const payload = req.body;
-    const result = await updateUserLifeStyleService(userId, payload);
+    const result = await updateUserLifeStyleService(mobileNumber, payload);
     if (!result)
       return notFoundResponse(res, "User lifestyle details not found");
     return successResponse(

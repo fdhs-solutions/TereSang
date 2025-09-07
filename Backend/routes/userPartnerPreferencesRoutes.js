@@ -10,10 +10,10 @@ const router = express.Router();
 // POST /user-partner-preferences
 router.post("/", createUserPartnerPreferences);
 
-// GET /user-partner-preferences/:userId
-router.get("/:userId", getUserPartnerPreferences);
+// GET /user-partner-preferences/:mobileNumber
+router.get("/:mobileNumber", getUserPartnerPreferences);
 
-// PUT /user-partner-preferences/:userId
-router.put("/:userId", updateUserPartnerPreferences);
+// PUT /user-partner-preferences/:mobileNumber
+router.put("/:mobileNumber", updateUserPartnerPreferences);
 
 export default router;

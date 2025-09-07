@@ -13,7 +13,7 @@ router.post("/", createUserPersonalDetails);
 // GET /user-personal-details/:userId
 router.get("/:userId", getUserPersonalDetails);
 
-// PUT /user-personal-details/:userId
-router.put("/:userId", updateUserPersonalDetails);
+// PUT /user-personal-details/:mobileNumber
+router.put("/:mobileNumber", updateUserPersonalDetails);
 
 export default router;

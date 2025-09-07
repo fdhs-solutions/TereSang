@@ -35,8 +35,8 @@ export const createUserPartnerPreferences = async (req, res, next) => {
 // Get partner preferences
 export const getUserPartnerPreferences = async (req, res, next) => {
   try {
-    const { userId } = req.params; // ✅ consistent param name
-    const result = await getUserPartnerPreferencesService(userId);
+    const { mobileNumber } = req.params; // changed param name to mobileNumber
+    const result = await getUserPartnerPreferencesService(mobileNumber);
     if (!result) return notFoundResponse(res, "Partner preferences not found");
     return successResponse(
       res,
@@ -51,9 +51,9 @@ export const getUserPartnerPreferences = async (req, res, next) => {
 // Update partner preferences
 export const updateUserPartnerPreferences = async (req, res, next) => {
   try {
-    const { userId } = req.params; // ✅ consistent param name
+    const { mobileNumber } = req.params; // changed param name to mobileNumber
     const payload = req.body;
-    const result = await updateUserPartnerPreferencesService(userId, payload);
+    const result = await updateUserPartnerPreferencesService(mobileNumber, payload);
     if (!result) return notFoundResponse(res, "Partner preferences not found");
     return successResponse(
       res,
