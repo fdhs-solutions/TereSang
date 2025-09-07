@@ -5,7 +5,7 @@ import Select from "react-select"; // Import react-select
 import styled from "styled-components";
 import Swal from "sweetalert2";
 import AuthHook from "../../../auth/AuthHook";
-import { AxiosConfig } from "../../../config/AxiosConfig";
+import { ProtectedAxiosConfig } from "../../../config/AxiosConfig";
 
 // Styled components
 const CardContainer = styled.div`
@@ -119,7 +119,12 @@ const personalFields = [
 
 const UserPersonalDetails = ({ response, setStatus, status }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [updatedProfile, setUpdatedProfile] = useState(response || {});
+  const [updatedProfile, setUpdatedProfile] = useState({
+    isPersonDisabled: "No",
+    isUserStayingAlone: "No",
+    ...response,
+  });
+
   const [loading, setLoading] = useState(false);
   const session = AuthHook();
   const { mobileNumber } = useParams();
@@ -208,10 +213,11 @@ const UserPersonalDetails = ({ response, setStatus, status }) => {
     };
 
     try {
-      const { data } = await AxiosConfig(requestConfig);
+      const { data } = await ProtectedAxiosConfig(requestConfig);
+
       setLoading(false);
 
-      if (data.status === 200 || data.status === 201) {
+      if (data.status) {
         setStatus(!status);
         Swal.fire(
           "Success!",
@@ -260,7 +266,11 @@ const UserPersonalDetails = ({ response, setStatus, status }) => {
   };
 
   useEffect(() => {
-    setUpdatedProfile(response || {});
+    setUpdatedProfile({
+      isPersonDisabled: response?.isPersonDisabled || "No",
+      isUserStayingAlone: response?.isUserStayingAlone || "No",
+      ...response,
+    });
   }, [response]);
 
   return (

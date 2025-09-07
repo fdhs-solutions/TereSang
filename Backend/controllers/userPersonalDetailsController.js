@@ -13,7 +13,7 @@ import {
 // Create
 export const createUserPersonalDetails = async (req, res) => {
   try {
-    const payload = req.body;
+    const payload = { ...req.body };
     const result = await createPersonalDetailsService(payload);
     return successResponse(
       res,
@@ -35,9 +35,10 @@ export const createUserPersonalDetails = async (req, res) => {
 // Update
 export const updateUserPersonalDetails = async (req, res) => {
   try {
-    const { userId } = req.params;
-    const payload = req.body;
-    const result = await updatePersonalDetailsService(userId, payload);
+    const { mobileNumber } = req.params;
+    const payload = { ...req.body };
+
+    const result = await updatePersonalDetailsService(mobileNumber, payload);
     if (!result) return notFoundResponse(res, "Personal details not found");
 
     return successResponse(
@@ -53,8 +54,8 @@ export const updateUserPersonalDetails = async (req, res) => {
 // Get
 export const getUserPersonalDetails = async (req, res) => {
   try {
-    const { userId } = req.params;
-    const result = await getPersonalDetailsService(userId);
+    const { userId: mobileNumber } = req.params;
+    const result = await getPersonalDetailsService(mobileNumber);
     if (!result) return notFoundResponse(res, "Personal details not found");
 
     return successResponse(
