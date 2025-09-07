@@ -6,6 +6,7 @@ import userFamilyRoutes from "../../routes/userFamilyRoutes.js";
 import userImageRoutes from "../../routes/userImageRoutes.js";
 import userLifeStyleRoutes from "../../routes/userLifeStyleRoutes.js";
 import userPersonalDetailsRoutes from "../../routes/userPersonalDetailsRoutes.js";
+import userPartnerPreferencesRoutes from "../../routes/userPartnerPreferencesRoutes.js";
 import viewProfilesRoutes from "../../routes/viewProfilesRoutes.js";
 
 const router = express.Router();
@@ -34,6 +35,7 @@ router.use(
 
 router.use("/update-user-life-style-details", authenticateJWT, userLifeStyleRoutes);
 router.use("/user-family", authenticateJWT, userFamilyRoutes);
+router.use("/update-user-partner-preferences", authenticateJWT, userPartnerPreferencesRoutes);
 
 /**
  * Image routes (Swagger: /images)

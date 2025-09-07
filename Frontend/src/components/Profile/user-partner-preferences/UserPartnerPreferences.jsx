@@ -5,7 +5,7 @@ import Select from "react-select";
 import styled from "styled-components";
 import Swal from "sweetalert2";
 import AuthHook from "../../../auth/AuthHook";
-import { AxiosConfig } from "../../../config/AxiosConfig";
+import { ProtectedAxiosConfig } from "../../../config/AxiosConfig";
 
 const CardContainer = styled.div`
   &:hover {
@@ -110,10 +110,10 @@ const UserPartnerPreferences = ({
     };
 
     try {
-      const { data } = await AxiosConfig(requestConfig);
+      const { data } = await ProtectedAxiosConfig(requestConfig);
       setLoading(false);
 
-      if (data.status === 200 || data.status === 201) {
+      if (data.status) {
         setStatus(!status);
         refresAfterUpdate && refresAfterUpdate(!status);
         Swal.fire(
