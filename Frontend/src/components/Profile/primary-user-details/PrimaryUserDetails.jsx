@@ -9,7 +9,7 @@ import ReactSelect from "react-select";
 import styled from "styled-components";
 import Swal from "sweetalert2";
 import AuthHook from "../../../auth/AuthHook";
-import { ApiUrl } from "../../../config/Config";
+import { ProtectedAxiosConfig } from "../../../config/AxiosConfig";
 
 const FullScreenModal = styled(motion.div)`
   position: fixed;
@@ -230,46 +230,50 @@ const PrimaryUserDetails = ({
     setLoading(true);
 
     const formData = new FormData();
-    Object.keys(data).forEach((key) => formData.append(key, data[key]));
+    // Exclude image-related fields from data to prevent sending existing image data
+    const imageFields = ["profileImage", "existingProfileImage"];
+    Object.keys(data).forEach((key) => {
+      if (!imageFields.includes(key)) {
+        formData.append(key, data[key]);
+      }
+    });
 
-    // Attach the binary blob directly to FormData
-    if (profileImageBlob)
+    // Only attach profileImage if there's a new image blob
+    if (profileImageBlob) {
       formData.append("profileImage", profileImageBlob, "profile.jpg");
+    }
+    // If no new image blob, don't send any profileImage field - backend will preserve existing image
 
-    fetch(`${ApiUrl}/auth/update-profile`, {
-      method: "PUT",
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setLoading(false);
-        if (data.status === 200 || data.status === 201) {
-          setStatus(!status);
-          refresAfterUpdate && refresAfterUpdate(!status);
-          Swal.fire(
-            "Success!",
-            "Profile updated successfully!",
-            "success"
-          ).then(() => {
-            setIsModalOpen(false);
-            window.location.reload();
-          });
-        } else {
-          Swal.fire(
-            "Error!",
-            "Failed to update profile. Please try again.",
-            "error"
-          );
-        }
-      })
-      .catch(() => {
-        setLoading(false);
+    try {
+      const response = await ProtectedAxiosConfig.put("/auth/update-profile", formData);
+
+      setLoading(false);
+      if (response.status === 200 || response.status === 201) {
+        setStatus(!status);
+        refresAfterUpdate && refresAfterUpdate(!status);
+        Swal.fire(
+          "Success!",
+          "Profile updated successfully!",
+          "success"
+        ).then(() => {
+          setIsModalOpen(false);
+          window.location.reload();
+        });
+      } else {
         Swal.fire(
           "Error!",
           "Failed to update profile. Please try again.",
           "error"
         );
-      });
+      }
+    } catch (error) {
+      setLoading(false);
+      Swal.fire(
+        "Error!",
+        "Failed to update profile. Please try again.",
+        "error"
+      );
+    }
   };
   // Calculate age based on DOB
   const calculateAge = (dob) => {

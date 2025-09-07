@@ -78,3 +78,24 @@ export const loginUserService = async ({ mobileNumber, password }) => {
 
   return { status: 200, user, jwtToken };
 };
+
+// Update primary details service
+export const updatePrimaryDetailsService = async (mobileNumber, payload) => {
+  const user = await UserRegistrationProfile.findOne({
+    where: { mobileNumber },
+  });
+  if (!user) return null;
+
+  // If password is being updated, hash it
+  if (payload.password) {
+    payload.password = await bcrypt.hash(payload.password, 10);
+  }
+
+  // Update the user
+  await user.update({
+    ...payload,
+    updatedTime: new Date(),
+  });
+
+  return user;
+};
