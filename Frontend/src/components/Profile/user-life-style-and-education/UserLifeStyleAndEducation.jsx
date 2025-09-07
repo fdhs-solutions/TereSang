@@ -5,7 +5,7 @@ import Select from "react-select";
 import styled from "styled-components";
 import Swal from "sweetalert2";
 import AuthHook from "../../../auth/AuthHook";
-import { AxiosConfig } from "../../../config/AxiosConfig";
+import { ProtectedAxiosConfig } from "../../../config/AxiosConfig";
 
 const CardContainer = styled.div`
   &:hover {
@@ -89,10 +89,10 @@ const UserLifeStyleAndEducation = ({
     };
 
     try {
-      const { data } = await AxiosConfig(requestConfig);
+      const { data } = await ProtectedAxiosConfig(requestConfig);
       setLoading(false);
 
-      if (data.status === 200 || data.status === 201) {
+      if (data.status) {
         setStatus(!status);
         refresAfterUpdate && refresAfterUpdate(!status);
         Swal.fire(
@@ -214,8 +214,8 @@ const UserLifeStyleAndEducation = ({
             <Modal.Title>
               <i className="fas fa-user-edit me-2"></i>
               {response
-                ? "Update Lifestyle and Education Details"
-                : "Add Lifestyle and Education Details"}
+                ? "Update Lifestyle and Education"
+                : "Add Lifestyle and Education"}
             </Modal.Title>
           </Modal.Header>
           <Modal.Body

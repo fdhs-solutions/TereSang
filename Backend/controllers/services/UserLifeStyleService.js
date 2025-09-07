@@ -1,5 +1,6 @@
 // services/userLifeStyleService.js
 import UserLifeStyleAndEducation from "../../models/UserLifeStyleAndEducation.js";
+import UserRegistrationProfile from "../../models/UserRegistrationProfile.js";
 
 // Create lifestyle details
 export const createUserLifeStyleService = async (payload) => {
@@ -11,12 +12,25 @@ export const getUserLifeStyleService = async (userId) => {
   return await UserLifeStyleAndEducation.findOne({ where: { userId } });
 };
 
-// Update lifestyle details by userId
-export const updateUserLifeStyleService = async (userId, payload) => {
-  const lifestyle = await UserLifeStyleAndEducation.findOne({
-    where: { userId },
+// Update lifestyle details by mobileNumber
+export const updateUserLifeStyleService = async (mobileNumber, payload) => {
+  const user = await UserRegistrationProfile.findOne({
+    where: { mobileNumber },
   });
-  if (!lifestyle) return null;
-  await lifestyle.update(payload);
+  if (!user) return null;
+
+  let lifestyle = await UserLifeStyleAndEducation.findOne({
+    where: { userId: user.id },
+  });
+  if (!lifestyle) {
+    // Create if not exists
+    lifestyle = await UserLifeStyleAndEducation.create({
+      userId: user.id,
+      ...payload,
+    });
+  } else {
+    // Update if exists
+    await lifestyle.update(payload);
+  }
   return lifestyle;
 };

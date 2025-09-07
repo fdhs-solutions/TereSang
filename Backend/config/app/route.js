@@ -32,7 +32,7 @@ router.use(
   userPersonalDetailsRoutes
 );
 
-router.use("/user-life-style", authenticateJWT, userLifeStyleRoutes);
+router.use("/update-user-life-style-details", authenticateJWT, userLifeStyleRoutes);
 router.use("/user-family", authenticateJWT, userFamilyRoutes);
 
 /**
