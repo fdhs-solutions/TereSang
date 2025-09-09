@@ -18,10 +18,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 connectDB();
+
 // ⚡ Sync models with DB automatically
 sequelize
   .sync({ alter: true }) // safely updates columns without dropping tables
-  .then(() => console.log("✅ DB synced (alter)"))
+  .then(() => {
+    console.log(
+      "⚠️ WARNING: DB ALTER mode enabled. Restarting may change tables!"
+    );
+    console.log("✅ DB synced (alter)");
+  })
   .catch((err) => console.error("❌ DB sync error:", err));
 
 appConfig(app);
