@@ -1,5 +1,5 @@
 import express from "express";
-import { loginUser, registerUser, updatePrimaryDetails, changePassword } from "../controllers/AuthController.js";
+import { loginUser, registerUser, updatePrimaryDetails, changePassword, forgotPasswordController, verifyOtpController, resetPasswordController } from "../controllers/AuthController.js";
 import { uploadSingle } from "../middlewares/uploadMiddleware.js";
 import { authenticateJWT } from "../middlewares/authMiddleware.js";
 
@@ -16,5 +16,16 @@ router.put("/update-profile", authenticateJWT, uploadSingle("profileImage"), upd
 
 // PUT /auth/change-password
 router.put("/change-password", authenticateJWT, changePassword);
+
+
+// Forgot password - sends OTP for password reset
+router.post("/forgot-password", forgotPasswordController);
+
+// OTP verification - handles registration, login, and password reset
+router.post("/verify-otp", verifyOtpController);
+
+// Reset password - updates password after OTP verification
+router.post("/reset-password", resetPasswordController);
+
 
 export default router;

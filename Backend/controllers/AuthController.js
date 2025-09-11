@@ -8,6 +8,9 @@ import {
   registerUserService,
   updatePrimaryDetailsService,
   changePasswordService,
+  forgotPasswordService,
+  verifyOtpService,
+  resetPasswordService
 } from "./services/AuthService.js";
 
 // Register Controller
@@ -99,5 +102,51 @@ export const changePassword = async (req, res) => {
     return successResponse(res, result.message);
   } catch (err) {
     return errorResponse(res, err.message || "Server error", [], 500);
+  }
+};
+
+
+// Forgot Password
+
+export const forgotPasswordController = async (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ success: false, message: "Email is required" });
+
+  try {
+    const result = await forgotPasswordService(email);
+    if (result.success) return res.json({ success: true, message: result.message });
+    return res.status(result.status || 400).json({ success: false, message: result.message });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+export const verifyOtpController = async (req, res) => {
+  const { email, otp } = req.body;
+  if (!email || !otp) return res.status(400).json({ success: false, message: "Email and OTP are required" });
+
+  try {
+    const result = await verifyOtpService(email, otp);
+    if (result.success) return res.json({ success: true, message: result.message });
+    return res.status(result.status || 400).json({ success: false, message: result.message });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+export const resetPasswordController = async (req, res) => {
+  const { email, newPassword } = req.body;
+  if (!email || !newPassword) return res.status(400).json({ success: false, message: "Email and new password are required" });
+  if (newPassword.length < 6) return res.status(400).json({ success: false, message: "Password must be at least 6 characters" });
+
+  try {
+    const result = await resetPasswordService(email, newPassword);
+    if (result.success) return res.json({ success: true, message: result.message });
+    return res.status(result.status || 400).json({ success: false, message: result.message });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
