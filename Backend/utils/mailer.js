@@ -57,7 +57,7 @@ const createOtpEmailTemplate = (otpCode, firstName, email) => {
     <div style="max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); overflow: hidden;">
         
         <div style="background-color: rgba(12, 13, 14, 1); padding: 10px; text-align: center;">
-            <img src="https://plus.unsplash.com/premium_photo-1674235766088-80d8410f9523?w=200&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8d2VkZGluZyUyMGJhY2tncm91bmR8ZW58MHx8MHx8fDA%3D" />
+                    <h1 style="margin: 0;color: #ffffff;font-size: 24px;font-weight: 700;letter-spacing: 1px;">Teresang</h1>
         </div>
 
         <div style="padding: 30px; text-align: center;">
@@ -73,7 +73,7 @@ const createOtpEmailTemplate = (otpCode, firstName, email) => {
             <p style="font-size: 16px; line-height: 1.6; color: #555;">If you didn't request this code, please ignore this email.</p>
         </div>
 
-        <div style="background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 14px; color: #777;">
+        <div style="background-color: #f0f0f0ff; padding: 20px; text-align: center; font-size: 14px; color: #777;">
             <p style="margin: 0;">&copy; 2025 Teresung. All rights reserved.</p>
             <p style="margin: 0;">Need help? <a href="mailto:support@fdhssolution@gmail.com" style="color: #007bff; text-decoration: none;">Contact Support</a></p>
         </div>
