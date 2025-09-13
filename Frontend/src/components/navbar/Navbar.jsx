@@ -7,22 +7,13 @@ import "./Navbar.css";
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const [activeLink, setActiveLink] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Get auth info from AuthHook
   const session = AuthHook();
 
   useEffect(() => setActiveLink(location.pathname), [location.pathname]);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20); // 20px के बाद solid बैकग्राउंड
-    window.addEventListener("scroll", onScroll);
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   const handleLogout = () => {
     Swal.fire({
@@ -52,22 +43,21 @@ function Navbar() {
   };
 
   return (
-
-    <nav
-      className={`navbar navbar-expand-lg ${session ? "nav-bg-white" : scrolled ? "nav-bg-solid" : "nav-bg-transparent"
+    <>
+      <nav
+        className={`navbar navbar-expand-lg ${
+          session ? "nav-bg-white" : "nav-bg-transparent"
         }`}
-    >
-      <div className="container">
-        <div className="navbar-brand">TereSang</div>
-        <button
-          className="navbar-toggler"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          <GiHamburgerMenu className="navbar-toggler-icon" />
-        </button>
+      >
+        <div className="container">
+          <div className="navbar-brand">TereSang</div>
+          {/* Hamburger icon for mobile */}
+          <button className="navbar-toggler" onClick={() => setMenuOpen(true)}>
+            <GiHamburgerMenu className="navbar-toggler-icon" />
+          </button>
 
-        <div className={`collapse navbar-collapse ${menuOpen ? "show" : ""}`}>
-          <ul className="navbar-nav ms-auto">
+          {/* Normal navbar links for desktop */}
+          <ul className="navbar-nav ms-auto d-none d-lg-flex">
             {!session ? (
               <>
                 <li className="nav-item">
@@ -81,8 +71,9 @@ function Navbar() {
                 </li>
                 <li className="nav-item">
                   <Link
-                    className={`nav-link ${activeLink === "/login" ? "active" : ""
-                      }`}
+                    className={`nav-link ${
+                      activeLink === "/login" ? "active" : ""
+                    }`}
                     to="/login"
                     onClick={() => handleNavigation("/login")}
                   >
@@ -91,8 +82,9 @@ function Navbar() {
                 </li>
                 <li className="nav-item">
                   <Link
-                    className={`nav-link ${activeLink === "/register" ? "active" : ""
-                      }`}
+                    className={`nav-link ${
+                      activeLink === "/register" ? "active" : ""
+                    }`}
                     to="/register"
                     onClick={() => handleNavigation("/register")}
                   >
@@ -104,17 +96,21 @@ function Navbar() {
               <>
                 <li className="nav-item">
                   <button
-                    className={`nav-link ${activeLink === "/profile" ? "active" : ""
-                      }`}
-                    onClick={() => handleNavigation(`/all-details/${session.mobileNumber}`)}
+                    className={`nav-link ${
+                      activeLink === "/profile" ? "active" : ""
+                    }`}
+                    onClick={() =>
+                      handleNavigation(`/all-details/${session.mobileNumber}`)
+                    }
                   >
                     My Profile
                   </button>
                 </li>
                 <li className="nav-item">
                   <button
-                    className={`nav-link ${activeLink === "/profiles" ? "active" : ""
-                      }`}
+                    className={`nav-link ${
+                      activeLink === "/profiles" ? "active" : ""
+                    }`}
                     onClick={() => handleNavigation("/profiles")}
                   >
                     Dashboard
@@ -122,8 +118,9 @@ function Navbar() {
                 </li>
                 <li className="nav-item">
                   <button
-                    className={`nav-link ${activeLink === "/change-password" ? "active" : ""
-                      }`}
+                    className={`nav-link ${
+                      activeLink === "/change-password" ? "active" : ""
+                    }`}
                     onClick={() => handleNavigation("/change-password")}
                   >
                     Change Password
@@ -138,9 +135,89 @@ function Navbar() {
             )}
           </ul>
         </div>
-      </div>
-    </nav>
+      </nav>
 
+      {/* ✅ Responsive Sidebar for Mobile */}
+      <div className={`responsive-sidebar ${menuOpen ? "open" : ""}`}>
+        <button className="close-button" onClick={() => setMenuOpen(false)}>
+          ✖
+        </button>
+        <ul className="mobile-menu">
+          {!session ? (
+            <>
+              <li>
+                <span
+                  className={`mobile-link ${activeLink === "/" ? "active" : ""}`}
+                  onClick={() => handleNavigation("/")}
+                >
+                  Home
+                </span>
+              </li>
+              <li>
+                <span
+                  className={`mobile-link ${
+                    activeLink === "/login" ? "active" : ""
+                  }`}
+                  onClick={() => handleNavigation("/login")}
+                >
+                  Login
+                </span>
+              </li>
+              <li>
+                <span
+                  className={`mobile-link ${
+                    activeLink === "/register" ? "active" : ""
+                  }`}
+                  onClick={() => handleNavigation("/register")}
+                >
+                  Register
+                </span>
+              </li>
+            </>
+          ) : (
+            <>
+              <li>
+                <span
+                  className={`mobile-link ${
+                    activeLink === "/profile" ? "active" : ""
+                  }`}
+                  onClick={() =>
+                    handleNavigation(`/all-details/${session.mobileNumber}`)
+                  }
+                >
+                  My Profile
+                </span>
+              </li>
+              <li>
+                <span
+                  className={`mobile-link ${
+                    activeLink === "/profiles" ? "active" : ""
+                  }`}
+                  onClick={() => handleNavigation("/profiles")}
+                >
+                  Dashboard
+                </span>
+              </li>
+              <li>
+                <span
+                  className={`mobile-link ${
+                    activeLink === "/change-password" ? "active" : ""
+                  }`}
+                  onClick={() => handleNavigation("/change-password")}
+                >
+                  Change Password
+                </span>
+              </li>
+              <li>
+                <span className="mobile-link" onClick={handleLogout}>
+                  Logout
+                </span>
+              </li>
+            </>
+          )}
+        </ul>
+      </div>
+    </>
   );
 }
 
