@@ -7,6 +7,7 @@ import "./Navbar.css";
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [activeLink, setActiveLink] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
@@ -15,6 +16,13 @@ function Navbar() {
   const session = AuthHook();
 
   useEffect(() => setActiveLink(location.pathname), [location.pathname]);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20); // 20px के बाद solid बैकग्राउंड
+    window.addEventListener("scroll", onScroll);
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const handleLogout = () => {
     Swal.fire({
@@ -44,10 +52,10 @@ function Navbar() {
   };
 
   return (
+
     <nav
-      className={`navbar navbar-expand-lg ${
-        session ? "nav-bg-white" : "nav-bg-transparent"
-      }`}
+      className={`navbar navbar-expand-lg ${session ? "nav-bg-white" : scrolled ? "nav-bg-solid" : "nav-bg-transparent"
+        }`}
     >
       <div className="container">
         <div className="navbar-brand">TereSang</div>
@@ -73,9 +81,8 @@ function Navbar() {
                 </li>
                 <li className="nav-item">
                   <Link
-                    className={`nav-link ${
-                      activeLink === "/login" ? "active" : ""
-                    }`}
+                    className={`nav-link ${activeLink === "/login" ? "active" : ""
+                      }`}
                     to="/login"
                     onClick={() => handleNavigation("/login")}
                   >
@@ -84,9 +91,8 @@ function Navbar() {
                 </li>
                 <li className="nav-item">
                   <Link
-                    className={`nav-link ${
-                      activeLink === "/register" ? "active" : ""
-                    }`}
+                    className={`nav-link ${activeLink === "/register" ? "active" : ""
+                      }`}
                     to="/register"
                     onClick={() => handleNavigation("/register")}
                   >
@@ -98,9 +104,8 @@ function Navbar() {
               <>
                 <li className="nav-item">
                   <button
-                    className={`nav-link ${
-                      activeLink === "/profile" ? "active" : ""
-                    }`}
+                    className={`nav-link ${activeLink === "/profile" ? "active" : ""
+                      }`}
                     onClick={() => handleNavigation(`/all-details/${session.mobileNumber}`)}
                   >
                     My Profile
@@ -108,9 +113,8 @@ function Navbar() {
                 </li>
                 <li className="nav-item">
                   <button
-                    className={`nav-link ${
-                      activeLink === "/profiles" ? "active" : ""
-                    }`}
+                    className={`nav-link ${activeLink === "/profiles" ? "active" : ""
+                      }`}
                     onClick={() => handleNavigation("/profiles")}
                   >
                     Dashboard
@@ -118,9 +122,8 @@ function Navbar() {
                 </li>
                 <li className="nav-item">
                   <button
-                    className={`nav-link ${
-                      activeLink === "/change-password" ? "active" : ""
-                    }`}
+                    className={`nav-link ${activeLink === "/change-password" ? "active" : ""
+                      }`}
                     onClick={() => handleNavigation("/change-password")}
                   >
                     Change Password
@@ -137,6 +140,7 @@ function Navbar() {
         </div>
       </div>
     </nav>
+
   );
 }
 

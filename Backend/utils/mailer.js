@@ -56,8 +56,8 @@ const createOtpEmailTemplate = (otpCode, firstName, email) => {
 <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f9; color: #333;">
     <div style="max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); overflow: hidden;">
         
-        <div style="background-color: rgba(12, 13, 14, 1); padding: 20px; text-align: center;">
-            <img src="https://th.bing.com/th/id/OIP.ulMiXe2tzZSuWdu091Ma8gHaE8?w=228&h=180&c=7&r=0&o=5&pid=1.7" alt="BitNXT Logo" style="max-width: 150px;" />
+        <div style="background-color: rgba(12, 13, 14, 1); padding: 10px; text-align: center;">
+            <img src="https://plus.unsplash.com/premium_photo-1674235766088-80d8410f9523?w=200&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8d2VkZGluZyUyMGJhY2tncm91bmR8ZW58MHx8MHx8fDA%3D" />
         </div>
 
         <div style="padding: 30px; text-align: center;">
@@ -74,8 +74,8 @@ const createOtpEmailTemplate = (otpCode, firstName, email) => {
         </div>
 
         <div style="background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 14px; color: #777;">
-            <p style="margin: 0;">&copy; 2025 BitNXT. All rights reserved.</p>
-            <p style="margin: 0;">Need help? <a href="mailto:support@bitnxt.com" style="color: #007bff; text-decoration: none;">Contact Support</a></p>
+            <p style="margin: 0;">&copy; 2025 Teresung. All rights reserved.</p>
+            <p style="margin: 0;">Need help? <a href="mailto:support@fdhssolution@gmail.com" style="color: #007bff; text-decoration: none;">Contact Support</a></p>
         </div>
 
     </div>
