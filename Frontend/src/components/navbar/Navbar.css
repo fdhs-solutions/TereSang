@@ -117,3 +117,9 @@
 .nav-bg-white .nav-link:hover {
   color: var(--navbar-hover-color); /* Define hover color for links */
 }
+
+@media (max-width: 786px) {
+  .nav-link {
+    color: black; /* Hide sidebar on larger screens */
+  }
+}

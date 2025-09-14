@@ -5,7 +5,7 @@ const UserRegistrationProfile = sequelize.define(
   "UserRegistrationProfile",
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    mobileNumber: { type: DataTypes.STRING, unique: true },
+    mobileNumber: DataTypes.STRING,
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
     age: DataTypes.INTEGER,
@@ -17,6 +17,8 @@ const UserRegistrationProfile = sequelize.define(
     religion: DataTypes.STRING,
     dob: DataTypes.DATEONLY,
     userMailId: DataTypes.STRING,
+    otp: DataTypes.STRING,
+    otpExpiration: DataTypes.DATE,
     profileImage: DataTypes.BLOB("long"),
     extension: DataTypes.STRING,
     createdTime: DataTypes.DATE,

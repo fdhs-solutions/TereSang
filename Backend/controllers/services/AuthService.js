@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import UserRegistrationProfile from "../../models/UserRegistrationProfile.js";
+import { sendOtp } from "../../utils/mailer.js";
 
 // ✅ Register User Service
 export const registerUserService = async (payload) => {
@@ -118,4 +119,57 @@ export const changePasswordService = async (mobileNumber, oldPassword, newPasswo
   });
 
   return { status: 200, message: "Password changed successfully" };
+};
+
+
+const genOtp = () => {
+  return Math.floor(100000 + Math.random() * 900000).toString(); // 6 digit
+};
+
+const SALT_ROUNDS = Number(process.env.SALT_ROUNDS);
+
+
+export const forgotPasswordService = async (email) => {
+  const user = await UserRegistrationProfile.findOne({ where: { userMailId: email } });
+  if (!user) return { success: false, status: 404, message: "User not found" };
+
+  const otp = genOtp();
+  const otpExpiration = new Date(Date.now() + process.env.OTP_EXPIRY_MINUTES * 60 * 1000);
+
+  // Save OTP & expiry to DB
+  await user.update({ otp, otpExpiration, updatedTime: new Date() });
+
+  // send email (will throw if fails)
+  await sendOtp(email, user.firstName, otp);
+
+  return { success: true, message: "OTP sent successfully to your email address. Please verify to reset your password." };
+};
+
+export const verifyOtpService = async (email, otp) => {
+  const user = await UserRegistrationProfile.findOne({ where: { userMailId: email } });
+  if (!user) return { success: false, status: 404, message: "User not found" };
+  if (!user.otp || !user.otpExpiration) return { success: false, status: 400, message: "No OTP found. Please request a new OTP." };
+
+  if (new Date() > new Date(user.otpExpiration)) {
+    return { success: false, status: 401, message: "OTP expired. Please request a new OTP." };
+  }
+
+  if (user.otp !== otp.toString()) {
+    return { success: false, status: 401, message: "Invalid OTP" };
+  }
+
+  // OTP verified -> clear OTP to prevent reuse (optional)
+  await user.update({ otp: null, otpExpiration: null, updatedTime: new Date() });
+
+  return { success: true, message: "OTP verified successfully" };
+};
+
+export const resetPasswordService = async (email, newPassword) => {
+  const user = await UserRegistrationProfile.findOne({ where: { userMailId: email } });
+  if (!user) return { success: false, status: 404, message: "User not found" };
+
+  const hashedNewPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);
+  await user.update({ password: hashedNewPassword, updatedTime: new Date() });
+
+  return { success: true, message: "Password reset successfully" };
 };
