@@ -18,7 +18,7 @@ const UserRegistrationProfile = sequelize.define(
     dob: DataTypes.DATEONLY,
     userMailId: DataTypes.STRING,
     otp: DataTypes.STRING,
-    otpExpiration: DataTypes.DATE,
+    otpExpiration: { type: DataTypes.DATE, allowNull: true },
     profileImage: DataTypes.BLOB("long"),
     extension: DataTypes.STRING,
     createdTime: DataTypes.DATE,
