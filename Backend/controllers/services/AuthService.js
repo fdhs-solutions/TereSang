@@ -92,6 +92,39 @@ export const updatePrimaryDetailsService = async (mobileNumber, payload) => {
     payload.password = await bcrypt.hash(payload.password, 10);
   }
 
+  // Normalize date fields: convert valid strings to Date, convert empty/invalid to null or remove
+  const dateFields = ["otpExpiration", "dob", "createdTime", "updatedTime"];
+  for (const f of dateFields) {
+    if (Object.prototype.hasOwnProperty.call(payload, f)) {
+      const val = payload[f];
+
+      // Treat empty string as null
+      if (val === "" || val === null || typeof val === "undefined") {
+        payload[f] = null;
+        continue;
+      }
+
+      // If already a Date object, check it's valid
+      if (val instanceof Date) {
+        if (isNaN(val.getTime())) payload[f] = null;
+        continue;
+      }
+
+      // Try to parse string/number into Date
+      const parsed = new Date(val);
+      if (!isNaN(parsed.getTime())) {
+        payload[f] = parsed; // Sequelize will send JS Date -> proper SQL datetime
+      } else {
+        // invalid date string: remove or set null to avoid DB error
+        payload[f] = null;
+      }
+    }
+  }
+
+  // Only add profileImage if buffer present (you already do this at controller)
+  // Update the user and set updatedTime to now (if you want)
+  payload.updatedTime = new Date();
+
   // Update the user
   await user.update({
     ...payload,
