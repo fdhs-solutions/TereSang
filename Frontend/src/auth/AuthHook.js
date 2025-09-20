@@ -24,6 +24,7 @@ const AuthHook = () => {
       // ✅ Return only session.data so UI doesn’t break
       setUser({
         ...session.data, // userName, mobileNumber, etc.
+        gender: session.gender, // Add gender to session
         jwtToken: session.jwtToken,
         tokenExpirationInMilis: session.tokenExpirationInMilis,
       });
