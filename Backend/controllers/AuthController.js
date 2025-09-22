@@ -46,11 +46,13 @@ export const loginUser = async (req, res) => {
     if (result.status !== 200)
       return errorResponse(res, result.message, [], result.status);
 
+    console.log('result :', result);
     return successResponse(res, "Login successful", {
       userName: result.user.firstName,
       mobileNumber: result.user.mobileNumber,
       jwtToken: result.jwtToken,
       tokenExpirationInMilis: Date.now() + 7 * 24 * 60 * 60 * 1000, // 7 days
+      gender: result.user.gender
     });
   } catch (err) {
     return errorResponse(res, err.message || "Server error", [], 500);

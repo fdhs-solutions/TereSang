@@ -1,6 +1,5 @@
 import React from "react";
-import FramerCard from "./FramerCard/FramerCard";
-import Phone from "@mui/icons-material/Phone";
+import FramerCard from "./FramerCard";
 
 // FramerCardData.js
 const fields = [
