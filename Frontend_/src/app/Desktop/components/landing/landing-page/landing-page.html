@@ -1,0 +1,140 @@
+<div class="landing-container">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <div class="logo-section">
+        <h1 class="app-title">Shadi<span class="app-subtitle">Connect</span></h1>
+        <p class="app-tagline">Find Your Perfect Match</p>
+      </div>
+
+      <div class="hero-text">
+        <h2>Welcome to the Future of Matchmaking</h2>
+        <p>Discover meaningful connections with our intelligent matchmaking platform designed to help you find your ideal life partner.</p>
+      </div>
+
+      <div class="hero-actions">
+        <button class="btn btn-primary" (click)="navigateToRegistration()">
+          <i class="fas fa-user-plus"></i>
+          Get Started
+        </button>
+        <button class="btn btn-secondary" (click)="navigateToLogin()">
+          <i class="fas fa-sign-in-alt"></i>
+          Sign In
+        </button>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="floating-hearts">
+        <i class="fas fa-heart"></i>
+        <i class="fas fa-heart"></i>
+        <i class="fas fa-heart"></i>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <div class="container">
+      <h2 class="section-title">Why Choose ShadiConnect?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-search"></i>
+          </div>
+          <h3>Smart Matching</h3>
+          <p>Our advanced algorithm finds compatible matches based on your preferences and personality.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3>Verified Profiles</h3>
+          <p>All profiles are thoroughly verified to ensure authenticity and safety.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <h3>Family Involvement</h3>
+          <p>Traditional values with modern approach - involve your family in the process.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-comments"></i>
+          </div>
+          <h3>Easy Communication</h3>
+          <p>Connect and communicate safely with potential matches through our platform.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-mobile-alt"></i>
+          </div>
+          <h3>Mobile Friendly</h3>
+          <p>Access your matches anywhere, anytime with our responsive design.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-privacy"></i>
+          </div>
+          <h3>Privacy First</h3>
+          <p>Your personal information is protected with industry-standard security.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Ready to Find Your Perfect Match?</h2>
+        <p>Join thousands of happy couples who found their love through ShadiConnect</p>
+        <button class="btn btn-primary btn-large" (click)="navigateToRegistration()">
+          <i class="fas fa-rocket"></i>
+          Start Your Journey Today
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>ShadiConnect</h4>
+          <p>Your trusted partner in finding meaningful relationships.</p>
+        </div>
+
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a (click)="navigateToAbout()">About Us</a></li>
+            <li><a (click)="navigateToContact()">Contact</a></li>
+            <li><a (click)="navigateToPrivacy()">Privacy Policy</a></li>
+            <li><a (click)="navigateToTerms()">Terms of Service</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h4>Support</h4>
+          <ul>
+            <li><a (click)="navigateToHelp()">Help Center</a></li>
+            <li><a (click)="navigateToFAQ()">FAQ</a></li>
+            <li><a (click)="navigateToSafety()">Safety Tips</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2024 ShadiConnect. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+</div>
