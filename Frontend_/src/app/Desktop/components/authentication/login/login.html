@@ -1,0 +1,129 @@
+<div class="login-container">
+  <!-- Left Panel - Login Form -->
+  <div class="login-form-panel">
+    <div class="login-form-wrapper">
+      <!-- Visit Home Link -->
+      <div class="home-link">
+        <a (click)="navigateToHome()">
+          <i class="fas fa-arrow-left"></i>
+          Visit Home
+        </a>
+      </div>
+
+      <!-- Login Title -->
+      <h1 class="login-title">Login</h1>
+
+      <!-- Login Form -->
+      <form (ngSubmit)="onLogin()" #loginForm="ngForm" class="login-form">
+        <!-- Mobile Number Input -->
+        <div class="form-group">
+          <input
+            type="text"
+            id="mobileNumber"
+            name="mobileNumber"
+            class="form-control"
+            placeholder="3234567890"
+            [(ngModel)]="loginData.mobileNumber"
+            required
+            #mobileNumber="ngModel"
+          >
+        </div>
+
+        <!-- Password Input -->
+        <div class="form-group">
+          <div class="password-input-wrapper">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              id="password"
+              name="password"
+              class="form-control"
+              placeholder="........"
+              [(ngModel)]="loginData.password"
+              required
+              #password="ngModel"
+            >
+            <button
+              type="button"
+              class="password-toggle"
+              (click)="togglePasswordVisibility()"
+            >
+              <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Forgot Password Link -->
+        <div class="forgot-password">
+          <a (click)="navigateToForgotPassword()">Forgot Password?</a>
+        </div>
+
+        <!-- Login Button -->
+        <button
+          type="submit"
+          class="btn-login"
+          [disabled]="loginForm.invalid || isLoading"
+        >
+          <i class="fas fa-sign-in-alt"></i>
+          {{ isLoading ? 'Logging in...' : 'Login' }}
+        </button>
+
+        <!-- Sign Up Link -->
+        <div class="signup-link">
+          <span>Don't have an account? </span>
+          <a (click)="navigateToRegister()">Signup Now</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Right Panel - Illustration -->
+  <div class="login-illustration-panel">
+    <div class="illustration-container">
+      <!-- Security themed illustration -->
+      <div class="security-illustration">
+        <!-- Background elements -->
+        <div class="bg-shape shape-1"></div>
+        <div class="bg-shape shape-2"></div>
+        <div class="bg-shape shape-3"></div>
+
+        <!-- Main illustration -->
+        <div class="main-illustration">
+          <!-- Person character -->
+          <div class="person">
+            <div class="person-head"></div>
+            <div class="person-body"></div>
+            <div class="person-arms">
+              <div class="arm-left"></div>
+              <div class="arm-right"></div>
+            </div>
+            <div class="person-legs">
+              <div class="leg-left"></div>
+              <div class="leg-right"></div>
+            </div>
+          </div>
+
+          <!-- Key -->
+          <div class="key">
+            <div class="key-handle"></div>
+            <div class="key-blade"></div>
+            <div class="key-teeth"></div>
+          </div>
+
+          <!-- Lock -->
+          <div class="lock">
+            <div class="lock-body"></div>
+            <div class="lock-shackle"></div>
+            <div class="keyhole"></div>
+          </div>
+
+          <!-- Security elements -->
+          <div class="security-elements">
+            <div class="gear gear-1"></div>
+            <div class="gear gear-2"></div>
+            <div class="gear gear-3"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
