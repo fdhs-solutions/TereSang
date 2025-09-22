@@ -1,0 +1,272 @@
+<div class="registration-container">
+  <!-- Left Panel - Illustration -->
+  <div class="registration-illustration-panel">
+    <div class="illustration-container">
+      <!-- Mobile Profile Illustration -->
+      <div class="mobile-illustration">
+        <!-- Background decorative elements -->
+        <div class="bg-shape shape-1"></div>
+        <div class="bg-shape shape-2"></div>
+        <div class="bg-shape shape-3"></div>
+
+        <!-- Main mobile illustration -->
+        <div class="mobile-device">
+          <div class="mobile-frame">
+            <div class="mobile-screen">
+              <!-- Profile section -->
+              <div class="profile-section">
+                <div class="profile-avatar">
+                  <div class="avatar-circle">
+                    <div class="avatar-face"></div>
+                    <div class="avatar-mask"></div>
+                  </div>
+                </div>
+                <div class="profile-card">
+                  <div class="card-lines">
+                    <div class="line line-1"></div>
+                    <div class="line line-2"></div>
+                    <div class="line line-3"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mobile-button"></div>
+        </div>
+
+        <!-- Decorative leaves -->
+        <div class="decorative-leaves">
+          <div class="leaf leaf-1"></div>
+          <div class="leaf leaf-2"></div>
+          <div class="leaf leaf-3"></div>
+          <div class="leaf leaf-4"></div>
+          <div class="leaf leaf-5"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Panel - Registration Form -->
+  <div class="registration-form-panel">
+    <div class="registration-form-wrapper">
+      <!-- Visit Home Link -->
+      <div class="home-link">
+        <a (click)="navigateToHome()">
+          <i class="fas fa-arrow-left"></i>
+          Visit Home
+        </a>
+      </div>
+
+      <!-- Registration Title -->
+      <h1 class="registration-title">Create Your Account!</h1>
+
+      <!-- Registration Form -->
+      <form (ngSubmit)="onRegister()" #registrationForm="ngForm" class="registration-form">
+        <!-- First Name and Last Name Row -->
+        <div class="form-row">
+          <div class="form-group">
+            <input
+              type="text"
+              id="firstName"
+              name="firstName"
+              class="form-control"
+              placeholder="First Name"
+              [(ngModel)]="registrationData.firstName"
+              required
+              #firstName="ngModel"
+            >
+          </div>
+          <div class="form-group">
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              class="form-control"
+              placeholder="Last Name"
+              [(ngModel)]="registrationData.lastName"
+              required
+              #lastName="ngModel"
+            >
+          </div>
+        </div>
+
+        <!-- Mobile Number -->
+        <div class="form-group">
+          <input
+            type="text"
+            id="mobileNumber"
+            name="mobileNumber"
+            class="form-control"
+            placeholder="3234567890"
+            [(ngModel)]="registrationData.mobileNumber"
+            required
+            #mobileNumber="ngModel"
+          >
+        </div>
+
+        <!-- Gender and Date of Birth Row -->
+        <div class="form-row">
+          <div class="form-group">
+            <select
+              id="gender"
+              name="gender"
+              class="form-control"
+              [(ngModel)]="registrationData.gender"
+              required
+              #gender="ngModel"
+            >
+              <option value="">Select Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <input
+              type="date"
+              id="dateOfBirth"
+              name="dateOfBirth"
+              class="form-control"
+              placeholder="Select Date of Birth"
+              [(ngModel)]="registrationData.dateOfBirth"
+              required
+              #dateOfBirth="ngModel"
+            >
+          </div>
+        </div>
+
+        <!-- Age and Religion Row -->
+        <div class="form-row">
+          <div class="form-group">
+            <select
+              id="age"
+              name="age"
+              class="form-control"
+              [(ngModel)]="registrationData.age"
+              required
+              #age="ngModel"
+            >
+              <option value="">Select Age</option>
+              <option *ngFor="let age of ageRange" [value]="age">{{ age }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <select
+              id="religion"
+              name="religion"
+              class="form-control"
+              [(ngModel)]="registrationData.religion"
+              required
+              #religion="ngModel"
+            >
+              <option value="">Select Religion</option>
+              <option value="hindu">Hindu</option>
+              <option value="muslim">Muslim</option>
+              <option value="christian">Christian</option>
+              <option value="sikh">Sikh</option>
+              <option value="buddhist">Buddhist</option>
+              <option value="jain">Jain</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Community -->
+        <div class="form-group">
+          <select
+            id="community"
+            name="community"
+            class="form-control"
+            [(ngModel)]="registrationData.community"
+            required
+            #community="ngModel"
+          >
+            <option value="">Select Community</option>
+            <option value="general">General</option>
+            <option value="obc">OBC</option>
+            <option value="sc">SC</option>
+            <option value="st">ST</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <!-- Address -->
+        <div class="form-group">
+          <textarea
+            id="address"
+            name="address"
+            class="form-control"
+            placeholder="Address"
+            rows="3"
+            [(ngModel)]="registrationData.address"
+            required
+            #address="ngModel"
+          ></textarea>
+        </div>
+
+        <!-- Password and Confirm Password Row -->
+        <div class="form-row">
+          <div class="form-group">
+            <div class="password-input-wrapper">
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                id="password"
+                name="password"
+                class="form-control"
+                placeholder="........"
+                [(ngModel)]="registrationData.password"
+                required
+                #password="ngModel"
+                minlength="6"
+              >
+              <button
+                type="button"
+                class="password-toggle"
+                (click)="togglePasswordVisibility()"
+              >
+                <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="password-input-wrapper">
+              <input
+                [type]="showConfirmPassword ? 'text' : 'password'"
+                id="confirmPassword"
+                name="confirmPassword"
+                class="form-control"
+                placeholder="Confirm Password"
+                [(ngModel)]="registrationData.confirmPassword"
+                required
+                #confirmPassword="ngModel"
+                minlength="6"
+              >
+              <button
+                type="button"
+                class="password-toggle"
+                (click)="toggleConfirmPasswordVisibility()"
+              >
+                <i [class]="showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Register Button -->
+        <button
+          type="submit"
+          class="btn-register"
+          [disabled]="registrationForm.invalid || isLoading"
+        >
+          {{ isLoading ? 'Creating Account...' : 'Register' }}
+        </button>
+
+        <!-- Login Link -->
+        <div class="login-link">
+          <span>Already have an account? </span>
+          <a (click)="navigateToLogin()">Log in</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
