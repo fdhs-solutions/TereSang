@@ -5,6 +5,7 @@ import { RegistrationComponent } from './components/authentication/registration/
 import { PageNotFoundComponent } from '../common/components/pageNotFound/pageNotFound';
 import { ServiceUnderDevelopmentComponent } from '../common/components/followBack/serviceUnderDevlopement';
 import { Dashboard } from './components/dashboard/dashboard';
+import { Profile } from './components/profile/profile';
 
 export const desktopRoutes: Routes = [
   { path: '', component: LandingPage },
@@ -15,7 +16,7 @@ export const desktopRoutes: Routes = [
   { path: '404', component: PageNotFoundComponent },
   { path: 'under-development', component: ServiceUnderDevelopmentComponent },
   // Example routes for features under development
-  { path: 'profile', component: ServiceUnderDevelopmentComponent },
+  { path: 'profile', component:  Profile},
   { path: 'search', component: ServiceUnderDevelopmentComponent },
   { path: 'messages', component: ServiceUnderDevelopmentComponent },
   { path: '**', component: PageNotFoundComponent }

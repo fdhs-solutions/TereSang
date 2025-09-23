@@ -1,0 +1,11 @@
+<nav class="profile-details__tabs">
+    <button
+      *ngFor="let tab of sidebarContent; let i = index"
+      (click)="selectTab(i)"
+      [class.profile-details__tab--active]="selectedTab === i"
+      class="profile-details__tab"
+    >
+      {{ tab }}
+    </button>
+  </nav>
+  
