@@ -1,0 +1,20 @@
+<div class="dashboard">
+  <div class="dashboard__header">
+    <app-navbar class="dashboard__navbar" />
+  </div>
+
+  <div class="dashboard__content">
+    <div class="dashboard__filter">
+      <app-filter
+        class="dashboard__filter-component"
+        (applyFilters)="handleApplyFilters($event)"
+        (clearFilters)="handleClearFilters()"
+      ></app-filter>
+    </div>
+    
+
+    <div class="dashboard__profile-card">
+      <app-profile-card class="dashboard__profile-card-component" />
+    </div>
+  </div>
+</div>

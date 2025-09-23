@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { NavbarComponent } from '../../navbar/navbar';
+import { Navbar } from '../../navbar/navbar';
 
 @Component({
   selector: 'app-landing-page',
   standalone: true,
-  imports: [NavbarComponent],
+  imports: [Navbar],
   templateUrl: './landing-page.html',
   styleUrl: './landing-page.scss'
 })

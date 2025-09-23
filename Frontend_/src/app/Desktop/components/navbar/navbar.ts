@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.scss']
 })
-export class NavbarComponent implements OnInit, OnDestroy {
+export class Navbar implements OnInit, OnDestroy {
   mobileMenuOpen = false;
   currentRoute = '/';
 

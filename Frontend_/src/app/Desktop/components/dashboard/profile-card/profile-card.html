@@ -1,0 +1,35 @@
+<section class="profile-section">
+  <div class="profile-layout">
+
+    <!-- PROFILE CARDS -->
+    <div class="profiles-container">
+      <div *ngIf="profiles.length === 0" class="empty-state">
+        No profiles found matching your criteria.
+      </div>
+
+      <div class="profile-card" *ngFor="let profile of paginatedProfiles()">
+        <img [src]="profile.image" class="profile-card__image" alt="{{profile.firstName}}" />
+
+        <div class="profile-card__info">
+          <h3>{{ profile.firstName }} {{ profile.lastName }}</h3>
+          <p>Age: {{ profile.age }} | Gender: {{ profile.gender }}</p>
+          <p>Religion: {{ profile.religion }} | Community: {{ profile.community }}</p>
+          <p>Location: {{ profile.residence }}</p>
+          <p>Languages: {{ profile.langKnown }}</p>
+          <button class="btn btn-primary">Show More Details</button>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination">
+        <button
+          *ngFor="let p of [].constructor(totalPages); let i = index"
+          (click)="page = i"
+          [class.active]="page === i"
+        >
+          {{ i+1 }}
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

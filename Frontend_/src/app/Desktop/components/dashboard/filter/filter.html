@@ -1,0 +1,64 @@
+<div class="filters-column">
+    <div class="header">
+      <h5>Filters</h5>
+      <button (click)="onApplyFilters()" class="btn btn-primary">
+        Apply
+      </button>
+    </div>
+  
+    <!-- Name Search -->
+    <div class="filter-row">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        placeholder="Search for profiles..."
+        class="form-control"
+      />
+    </div>
+  
+    <!-- Age Range Filter -->
+    <div class="filter-row age-filter">
+      <select [(ngModel)]="minAge" class="form-control">
+        <option [ngValue]="null">Min Age</option>
+        <option *ngFor="let age of ageOptions" [value]="age">
+          {{ age }}
+        </option>
+      </select>
+  
+      <span>-</span>
+  
+      <select [(ngModel)]="maxAge" class="form-control">
+        <option [ngValue]="null">Max Age</option>
+        <option *ngFor="let age of ageOptions" [value]="age">
+          {{ age }}
+        </option>
+      </select>
+    </div>
+  
+    <!-- Location Filter -->
+    <div class="filter-row">
+      <input
+        type="text"
+        [(ngModel)]="location"
+        placeholder="Location"
+        class="form-control"
+      />
+    </div>
+  
+    <!-- Religion Filter -->
+    <div class="filter-row">
+      <select [(ngModel)]="religion" class="form-control">
+        <option value="">Select Religion</option>
+        <option *ngFor="let r of religions" [value]="r">
+          {{ r }}
+        </option>
+      </select>
+    </div>
+  
+    <div class="filter-actions">
+      <button (click)="onClearFilters()" class="btn btn-secondary">
+        Clear Search
+      </button>
+    </div>
+  </div>
+  

@@ -1,0 +1,38 @@
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; // full page height
+  
+    &__header {
+      height: 60px;
+  
+      .dashboard__navbar {
+        display: block;
+      }
+    }
+  
+    &__content {
+      flex: 1; // takes all remaining space
+      display: flex;
+      gap: 1rem;
+      padding: 2rem 8rem;
+      background-color: #f5f5f5;
+    }
+  
+    &__filter {
+      flex: 0 0 350px; // fixed width for filter sidebar
+      background-color: #ffffff;
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+  
+    &__profile-card {
+      flex: 1; // take remaining space
+      background-color: #ffffff;
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+  }
+  

@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './registration.html',
-  styleUrls: ['./registration.css']
+  styleUrls: ['./registration.scss']
 })
 export class RegistrationComponent implements OnInit {
   showPassword = false;
