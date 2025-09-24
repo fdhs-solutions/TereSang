@@ -1,57 +1,22 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink, RouterModule],
   templateUrl: './navbar.html',
-  styleUrls: ['./navbar.scss']
+  styleUrls: ['./navbar.scss'],
 })
-export class Navbar implements OnInit, OnDestroy {
+export class Navbar {
   mobileMenuOpen = false;
-  currentRoute = '/';
 
-  private routerSubscription: any;
-
-  constructor(private router: Router) {}
-
-  ngOnInit() {
-    // Track current route for active link highlighting
-    this.routerSubscription = this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.currentRoute = event.url;
-      }
-    });
-
-    // Set initial route
-    this.currentRoute = this.router.url;
-  }
-
-  ngOnDestroy() {
-    if (this.routerSubscription) {
-      this.routerSubscription.unsubscribe();
-    }
-  }
-
-  toggleMobileMenu() {
-    this.mobileMenuOpen = !this.mobileMenuOpen;
-  }
-
-  closeMobileMenu() {
-    this.mobileMenuOpen = false;
-  }
-
-  navigateToHome() {
-    this.router.navigate(['/']);
-  }
-
-  navigateToLogin() {
-    this.router.navigate(['/login']);
-  }
-
-  navigateToRegister() {
-    this.router.navigate(['/register']);
-  }
+  protected navbarMenus = [
+    { path: 'landing', label: 'Home' },
+    { path: 'login', label: 'Login' },
+    { path: 'register', label: 'Register' },
+    { path: 'profile', label: 'Profile' },
+    { path: 'dashboard', label: 'Dashboard' },
+  ];
 }

@@ -1,88 +1,29 @@
 <nav class="navbar navbar-expand-lg navbar-transparent">
   <div class="container">
     <!-- Left side - Brand -->
-    <a class="navbar-brand"  (click)="navigateToHome()">
+    <a
+      class="navbar-brand"
+      [routerLink]="['/', 'landing']"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
       TereSang
     </a>
 
-    <!-- Mobile menu toggle -->
-    <button
-      class="navbar-toggler"
-      type="button"
-      (click)="toggleMobileMenu()"
-      aria-controls="navbarNav"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
     <!-- Right side - Menu items -->
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a
-            class="nav-link"
-            [class.active]="currentRoute === '/'"
-            (click)="navigateToHome()"
-          >
-            Home
-          </a>
-        </li>
-        <li class="nav-item">
-          <a
-            class="nav-link"
-            [class.active]="currentRoute === '/login'"
-            (click)="navigateToLogin()"
-          >
-            Login
-          </a>
-        </li>
-        <li class="nav-item">
-          <a
-            class="nav-link"
-            [class.active]="currentRoute === '/register'"
-            (click)="navigateToRegister()"
-          >
-            Register
-          </a>
-        </li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- Mobile menu overlay -->
-  <div class="mobile-menu-overlay" [class.show]="mobileMenuOpen" (click)="closeMobileMenu()">
-    <div class="mobile-menu" (click)="$event.stopPropagation()">
-      <button class="close-button" (click)="closeMobileMenu()">
-        &times;
-      </button>
-      <ul class="mobile-nav-list">
-        <li>
-          <a
-            [class.active]="currentRoute === '/'"
-            (click)="navigateToHome(); closeMobileMenu()"
-          >
-            Home
-          </a>
-        </li>
-        <li>
-          <a
-            [class.active]="currentRoute === '/login'"
-            (click)="navigateToLogin(); closeMobileMenu()"
-          >
-            Login
-          </a>
-        </li>
-        <li>
-          <a
-            [class.active]="currentRoute === '/register'"
-            (click)="navigateToRegister(); closeMobileMenu()"
-          >
-            Register
-          </a>
-        </li>
-      </ul>
-    </div>
+    <ul class="navbar-nav ms-auto">
+      @for (item of navbarMenus; track $index) {
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          [routerLink]="['/', item.path]"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          {{ item.label }}
+        </a>
+      </li>
+      }
+    </ul>
   </div>
 </nav>
