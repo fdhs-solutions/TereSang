@@ -295,6 +295,8 @@ function Registration() {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      setFormData(prev => ({ ...prev, profileImage: file }));
+      setErrors(prev => ({ ...prev, profileImage: "" }));
       const imageUrl = URL.createObjectURL(file);
       setImagePreview(imageUrl);
       setIsCropScreenVisible(true);
@@ -341,6 +343,7 @@ function Registration() {
     const croppedImageBlob = await createCroppedImage();
     if (croppedImageBlob) {
       setFormData({ ...formData, profileImage: croppedImageBlob });
+      setErrors(prev => ({ ...prev, profileImage: "" }));
       setIsCropScreenVisible(false);
       setImagePreview(URL.createObjectURL(croppedImageBlob));
     }
