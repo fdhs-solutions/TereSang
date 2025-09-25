@@ -37,7 +37,14 @@ const UserFamilyDetails = ({
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    setUpdatedProfile(response || {});
+    if (response) {
+      const brothers = parseInt(response.noOfBrothers) || 0;
+      const sisters = parseInt(response.noOfSisters) || 0;
+      const totalFamilyMembers = brothers + sisters + 3; // parents + user
+      setUpdatedProfile({ ...response, noOfFamilyMembers: totalFamilyMembers });
+    } else {
+      setUpdatedProfile({ noOfFamilyMembers: 3 }); // default for new, parents + user
+    }
   }, [response]);
 
   const validateFields = () => {
@@ -60,15 +67,16 @@ const UserFamilyDetails = ({
       errors.noOfSisters = "Number of Sisters is required.";
     if (!updatedProfile.noOfSistersMarried)
       errors.noOfSistersMarried = "Number of Married Sisters is required.";
-    if (!updatedProfile.noOfFamilyMembers)
-      errors.noOfFamilyMembers = "Total Number of Family Members is required.";
 
     // Max value validation
-    if (updatedProfile.noOfFamilyMembers > MAX_VALUE)
+    const totalFamilyMembers = parseInt(updatedProfile.noOfFamilyMembers) || 0;
+    if (totalFamilyMembers > MAX_VALUE)
       errors.noOfFamilyMembers = `Total Number of Family Members must be below ${MAX_VALUE}`;
-    if (updatedProfile.noOfBrothers > MAX_VALUE)
+    const brothers = parseInt(updatedProfile.noOfBrothers) || 0;
+    if (brothers > MAX_VALUE)
       errors.noOfBrothers = `Number of Brothers must be below ${MAX_VALUE}`;
-    if (updatedProfile.noOfSisters > MAX_VALUE)
+    const sisters = parseInt(updatedProfile.noOfSisters) || 0;
+    if (sisters > MAX_VALUE)
       errors.noOfSisters = `Number of Sisters must be below ${MAX_VALUE}`;
 
     setErrors(errors);
@@ -118,27 +126,37 @@ const UserFamilyDetails = ({
   };
 
   const renderFamilyFields = () => {
-    return familyFields.map((field, index) => (
-      <div
-        key={index}
-        className="mb-2 p-2 d-flex justify-content-between align-items-center border-bottom"
-        style={{ flexWrap: "wrap" }}
-      >
-        <strong className="text-primary" style={{ fontSize: "1rem" }}>
-          {field.value}:
-        </strong>
-        <span
-          className="text-dark"
-          style={{ fontSize: "1rem", paddingLeft: "10px" }}
+    return familyFields.map((field, index) => {
+      let displayValue = "N/A";
+      if (response) {
+        if (field.key === "noOfFamilyMembers") {
+          const brothers = parseInt(response.noOfBrothers) || 0;
+          const sisters = parseInt(response.noOfSisters) || 0;
+          displayValue = brothers + sisters + 3;
+        } else if (response[field.key]) {
+          displayValue = Array.isArray(response[field.key])
+            ? response[field.key].join(", ")
+            : response[field.key];
+        }
+      }
+      return (
+        <div
+          key={index}
+          className="mb-2 p-2 d-flex justify-content-between align-items-center border-bottom"
+          style={{ flexWrap: "wrap" }}
         >
-          {response && response[field.key]
-            ? Array.isArray(response[field.key])
-              ? response[field.key].join(", ")
-              : response[field.key]
-            : "N/A"}
-        </span>
-      </div>
-    ));
+          <strong className="text-primary" style={{ fontSize: "1rem" }}>
+            {field.value}:
+          </strong>
+          <span
+            className="text-dark"
+            style={{ fontSize: "1rem", paddingLeft: "10px" }}
+          >
+            {displayValue}
+          </span>
+        </div>
+      );
+    });
   };
 
   const renderFormFields = () => {
@@ -152,8 +170,13 @@ const UserFamilyDetails = ({
             onChange={(e) => handleFieldChange(field.key, e.target.value)}
             min={0}
             placeholder={`Enter ${field.value}`}
+            disabled={field.key === "noOfFamilyMembers"}
             className="border-0 rounded-end"
-            style={{ boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)", width: "100%" }}
+            style={{ 
+              boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)", 
+              width: "100%",
+              backgroundColor: field.key === "noOfFamilyMembers" ? "#f3f4f6" : "white"
+            }}
           />
           {errors[field.key] && (
             <div className="text-danger mt-1" style={{ fontSize: "0.8rem" }}>
@@ -173,20 +196,57 @@ const UserFamilyDetails = ({
   };
 
   const handleFieldChange = (key, value) => {
-    const transformedValue = convertToPascalCase(value);
-    setUpdatedProfile((prevProfile) => ({
-      ...prevProfile,
-      [key]: transformedValue,
-    }));
+    if (key.includes("noOf")) {
+      const newValue = parseInt(value) || 0;
+      setUpdatedProfile((prevProfile) => {
+        const updated = { ...prevProfile, [key]: newValue };
 
-    // Apply max value check
-    if (transformedValue.length > MAX_VALUE) {
-      setErrors((prev) => ({
-        ...prev,
-        [key]: `Value must be below ${MAX_VALUE}`,
-      }));
+        // Max value check for numbers
+        if (newValue > MAX_VALUE) {
+          setErrors((prev) => ({
+            ...prev,
+            [key]: `Value must be below ${MAX_VALUE}`,
+          }));
+        } else {
+          setErrors((prev) => ({ ...prev, [key]: "" }));
+        }
+
+        // Recalculate total family members if brothers or sisters changed
+        if (key === "noOfBrothers" || key === "noOfSisters") {
+          const brothers = key === "noOfBrothers" ? newValue : (parseInt(updated.noOfBrothers) || 0);
+          const sisters = key === "noOfSisters" ? newValue : (parseInt(updated.noOfSisters) || 0);
+          const totalFamilyMembers = brothers + sisters + 3; // parents + user
+          updated.noOfFamilyMembers = totalFamilyMembers;
+
+          // Check total max
+          if (totalFamilyMembers > MAX_VALUE) {
+            setErrors((prev) => ({
+              ...prev,
+              noOfFamilyMembers: `Total Number of Family Members must be below ${MAX_VALUE}`,
+            }));
+          } else {
+            setErrors((prev) => ({ ...prev, noOfFamilyMembers: "" }));
+          }
+        }
+
+        return updated;
+      });
     } else {
-      setErrors((prev) => ({ ...prev, [key]: "" }));
+      const newValue = convertToPascalCase(value);
+      setUpdatedProfile((prevProfile) => ({
+        ...prevProfile,
+        [key]: newValue,
+      }));
+
+      // Max length check for text
+      if (newValue.length > MAX_VALUE) {
+        setErrors((prev) => ({
+          ...prev,
+          [key]: `Value must be below ${MAX_VALUE} characters`,
+        }));
+      } else {
+        setErrors((prev) => ({ ...prev, [key]: "" }));
+      }
     }
   };
 

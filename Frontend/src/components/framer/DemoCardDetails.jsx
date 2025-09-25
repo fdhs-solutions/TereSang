@@ -21,9 +21,11 @@ const DemoCardDetails = () => {
   const [activeSection, setActiveSection] = useState("PrimaryUserDetails");
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [status, setStatus] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // Fetch user data
   const fetchUserData = async (mobileNumber) => {
+    setLoading(true);
     try {
       const allData = await getAllUserDetails(mobileNumber);
       setUserDetails(allData || { response: {} });
@@ -33,6 +35,8 @@ const DemoCardDetails = () => {
       console.error("Failed to load data", err);
       setUserDetails({ response: {} });
       setProfileImage(null);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -51,7 +55,7 @@ const DemoCardDetails = () => {
 
   // Function to render all sections at once or the active component
   const renderActiveSection = () => {
-    if (!userDetails) return <p>Loading...</p>;
+    if (!userDetails) return <p>No data found</p>;
 
     if (isMobile) {
       return (
@@ -176,7 +180,19 @@ const DemoCardDetails = () => {
   };
 
   return (
-    <section className="demo-card-details" style={{ height: "100vh" }}>
+    <section
+      className="demo-card-details"
+      style={{ height: "100vh", position: "relative" }}
+    >
+      {/* Loader overlay */}
+      {loading && (
+        <div className="loader-overlay">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      )}
+
       <div className="row h-full">
         {!isMobile && (
           <div
