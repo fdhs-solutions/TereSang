@@ -97,15 +97,15 @@ function Registration() {
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
 
-    // Set formData
+    // Handle file input (profile image)
     if (type === "file") {
       const file = files[0];
       if (file) {
-        setImagePreview(URL.createObjectURL(file)); // Set the new image preview
-        setCrop({ x: 0, y: 0 }); // Reset crop position
-        setZoom(1); // Reset zoom
-        setIsCropScreenVisible(true); // Open crop screen on image selection
-        setFormData({ ...formData, profileImage: file }); // Set the profile image in form data
+        setImagePreview(URL.createObjectURL(file));
+        setCrop({ x: 0, y: 0 });
+        setZoom(1);
+        setIsCropScreenVisible(true);
+        setFormData({ ...formData, profileImage: file });
       } else {
         setImagePreview(null);
       }
@@ -113,10 +113,10 @@ function Registration() {
       setFormData({ ...formData, [name]: value });
     }
 
+    // Handle DOB → auto-set age
     if (name === "dob" && value) {
       const age = calculateAge(value);
 
-      // Check for valid age (between 18 and 60)
       if (age < 18 || age > 60) {
         setErrors((prevErrors) => ({
           ...prevErrors,
@@ -125,13 +125,13 @@ function Registration() {
         setFormData((prevData) => ({
           ...prevData,
           dob: value,
-          age: "", // Clear age if invalid
+          age: "",
         }));
       } else {
         setFormData((prevData) => ({
           ...prevData,
           dob: value,
-          age, // Automatically set age if valid
+          age,
         }));
       }
     } else {
@@ -140,7 +140,33 @@ function Registration() {
         [name]: value,
       }));
     }
-    validate(name, value); // Validate other fields
+
+    // Field validation
+    validate(name, value);
+
+    // Password match validation
+    if (name === "password" || name === "confirmPassword") {
+      const latestPassword = name === "password" ? value : formData.password;
+      const latestConfirmPassword =
+        name === "confirmPassword" ? value : formData.confirmPassword;
+
+      if (
+        latestPassword &&
+        latestConfirmPassword &&
+        latestPassword !== latestConfirmPassword
+      ) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          confirmPassword: "Passwords do not match.",
+        }));
+      } else {
+        setErrors((prevErrors) => {
+          const newErrors = { ...prevErrors };
+          delete newErrors.confirmPassword; // ✅ no ESLint warning
+          return newErrors;
+        });
+      }
+    }
   };
 
   const validate = (name, value) => {
@@ -230,7 +256,8 @@ function Registration() {
       { key: "profileImage", message: "Profile image is required" },
     ];
 
-    const { mobileNumber, mailId, password, confirmPassword } = formData;
+    // eslint-disable-next-line no-unused-vars
+    const { mobileNumber, mailId, password } = formData;
 
     // Check for missing required fields
     requiredFields.forEach((field) => {
@@ -250,8 +277,12 @@ function Registration() {
     }
 
     // Check password match
-    if (password && confirmPassword && password !== confirmPassword) {
-      newErrors.password = "Passwords do not match.";
+    if (
+      password &&
+      formData.confirmPassword &&
+      password !== formData.confirmPassword
+    ) {
+      newErrors.confirmPassword = "Passwords do not match.";
     }
 
     // Update the errors state
