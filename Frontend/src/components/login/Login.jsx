@@ -214,7 +214,7 @@ function Login() {
                 </button>
                 <div className="py-3">
                   <p className="mt-4 text-center text-gray-600">
-                    Don't have an account?{" "}
+                    {"Don't have an account? "}
                     <Link
                       to="/register"
                       className="text-blue-500 hover:text-blue-700 text-decoration-none"

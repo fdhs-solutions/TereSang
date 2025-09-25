@@ -347,55 +347,75 @@ function Registration() {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (validateAll()) {
-      try {
-        setLoading(true);
-
-        const formDataToSend = new FormData();
-
-        // Process each field before appending
-        Object.entries(formData).forEach(([key, value]) => {
-          if (key === "dob" && value) {
-            // Format the DOB to yyyy-MM-dd
-            const formattedDob = new Date(value).toISOString().split("T")[0];
-            formDataToSend.append(key, formattedDob);
-          } else {
-            formDataToSend.append(key, value);
-          }
-        });
-
-        // Append profileImage if available
-        // if (profileImageBlob) {
-        //   formDataToSend.append("profileImage", profileImageBlob, "profile.jpg");
-        // }
-
-        await axios.post(`${ApiUrl}/auth/register`, formDataToSend);
-
-        setLoading(false);
-
-        Swal.fire({
-          title: "Success!",
-          text: "Profile creation successful!",
-          icon: "success",
-          confirmButtonText: "OK",
-        }).then(() => {
-          navigate("/login");
-        });
-      } catch (error) {
-        console.error("Error:", error);
-        setLoading(false);
-        Swal.fire({
-          title: "Error!",
-          text: "There was an issue creating the profile.",
-          icon: "error",
-          confirmButtonText: "OK",
-        });
-      }
-    } else {
+  
+    if (!validateAll()) {
       console.log("Form validation failed");
+      return;
+    }
+  
+    try {
+      setLoading(true);
+  
+      const formDataToSend = new FormData();
+  
+      // Process each field before appending
+      Object.entries(formData).forEach(([key, value]) => {
+        if (key === "dob" && value) {
+          // Format the DOB to yyyy-MM-dd
+          const formattedDob = new Date(value).toISOString().split("T")[0];
+          formDataToSend.append(key, formattedDob);
+        } else {
+          formDataToSend.append(key, value);
+        }
+      });
+  
+      // Append profile image if available
+      // if (profileImageBlob) {
+      //   formDataToSend.append("profileImage", profileImageBlob, "profile.jpg");
+      // }
+  
+      const response = await axios.post(`${ApiUrl}/auth/register`, formDataToSend);
+  
+      setLoading(false);
+  
+      Swal.fire({
+        title: "Success!",
+        text: response.data.message || "Profile creation successful!",
+        icon: "success",
+        confirmButtonText: "OK",
+      }).then(() => {
+        navigate("/login");
+      });
+  
+    } catch (error) {
+      setLoading(false);
+  
+      // Default error message
+      let errorMessage = "There was an issue creating the profile.";
+  
+      // Check if backend returned a message
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      }
+  
+      // Check if backend returned field-level errors
+      if (error.response?.data?.errors?.length) {
+        const fieldErrors = {};
+        error.response.data.errors.forEach(err => {
+          fieldErrors[err.field] = err.message;
+        });
+        setErrors(fieldErrors);
+      }
+  
+      Swal.fire({
+        title: "Error!",
+        text: errorMessage,
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     }
   };
+  
 
   function toPascalCase(text) {
     return text
