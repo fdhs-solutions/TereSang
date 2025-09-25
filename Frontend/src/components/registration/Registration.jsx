@@ -92,7 +92,7 @@ function Registration() {
   minDate.setFullYear(minDate.getFullYear() - 60); // 60 years ago
 
   const maxDate = new Date();
-  maxDate.setFullYear(maxDate.getFullYear() - 18); // 18 years ago
+  maxDate.setFullYear(maxDate.getFullYear() - 21); // 18 years ago
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
