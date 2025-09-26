@@ -36,6 +36,9 @@ const UserFamilyDetails = ({
   const { mobileNumber } = useParams();
   const [errors, setErrors] = useState({});
 
+  // Occupation options
+  const occupationOptions = ["Private Job", "Government Job", "Business", "Others"];
+
   useEffect(() => {
     if (response) {
       const brothers = parseInt(response.noOfBrothers) || 0;
@@ -53,12 +56,26 @@ const UserFamilyDetails = ({
     // Required fields validation
     if (!updatedProfile.fatherName)
       errors.fatherName = "Father's Name is required.";
+
     if (!updatedProfile.fatherOccupation)
       errors.fatherOccupation = "Father's Occupation is required.";
+    else if (
+      updatedProfile.fatherOccupation === "Others" &&
+      !updatedProfile.customFatherOccupation
+    )
+      errors.customFatherOccupation = "Please enter custom occupation.";
+
     if (!updatedProfile.motherName)
       errors.motherName = "Mother's Name is required.";
+
     if (!updatedProfile.motherOccupation)
       errors.motherOccupation = "Mother's Occupation is required.";
+    else if (
+      updatedProfile.motherOccupation === "Others" &&
+      !updatedProfile.customMotherOccupation
+    )
+      errors.customMotherOccupation = "Please enter custom occupation.";
+
     if (!updatedProfile.noOfBrothers)
       errors.noOfBrothers = "Number of Brothers is required.";
     if (!updatedProfile.noOfBrothersMarried)
@@ -72,9 +89,11 @@ const UserFamilyDetails = ({
     const totalFamilyMembers = parseInt(updatedProfile.noOfFamilyMembers) || 0;
     if (totalFamilyMembers > MAX_VALUE)
       errors.noOfFamilyMembers = `Total Number of Family Members must be below ${MAX_VALUE}`;
+
     const brothers = parseInt(updatedProfile.noOfBrothers) || 0;
     if (brothers > MAX_VALUE)
       errors.noOfBrothers = `Number of Brothers must be below ${MAX_VALUE}`;
+
     const sisters = parseInt(updatedProfile.noOfSisters) || 0;
     if (sisters > MAX_VALUE)
       errors.noOfSisters = `Number of Sisters must be below ${MAX_VALUE}`;
@@ -90,6 +109,19 @@ const UserFamilyDetails = ({
 
     setLoading(true);
 
+    // ✅ Normalize occupation values before sending
+    const finalPayload = {
+      ...updatedProfile,
+      fatherOccupation:
+        updatedProfile.fatherOccupation === "Others"
+          ? updatedProfile.customFatherOccupation
+          : updatedProfile.fatherOccupation,
+      motherOccupation:
+        updatedProfile.motherOccupation === "Others"
+          ? updatedProfile.customMotherOccupation
+          : updatedProfile.motherOccupation,
+    };
+
     const endpoint = response
       ? `/user-family/update-user-family-details/${mobileNumber}`
       : `/save-user-family-details?mobileNumber=${mobileNumber}`;
@@ -97,7 +129,7 @@ const UserFamilyDetails = ({
     const requestConfig = {
       method: response ? "PUT" : "POST",
       url: endpoint,
-      data: response ? updatedProfile : { mobileNumber, ...updatedProfile }, // Adjusting payload for POST requests
+      data: response ? finalPayload : { mobileNumber, ...finalPayload }, // ✅ send normalized payload
     };
 
     try {
@@ -105,16 +137,13 @@ const UserFamilyDetails = ({
 
       setLoading(false);
       if (data.status) {
-        // true means success
         setStatus(!status);
         refresAfterUpdate && refresAfterUpdate(!status);
-        Swal.fire(
-          "Success!",
-          "User details updated successfully!",
-          "success"
-        ).then(() => {
-          toggleModal();
-        });
+        Swal.fire("Success!", "User details updated successfully!", "success").then(
+          () => {
+            toggleModal();
+          }
+        );
       } else {
         Swal.fire("Error", "Failed to update user details", "error");
       }
@@ -160,32 +189,126 @@ const UserFamilyDetails = ({
   };
 
   const renderFormFields = () => {
-    return familyFields.map((field, index) => (
-      <Form.Group key={index} className="mb-4">
-        <Form.Label className="font-weight-bold">{field.value}</Form.Label>
-        <div className="input-group" style={{ flexDirection: "column" }}>
-          <Form.Control
-            type={field.key.includes("noOf") ? "number" : "text"}
-            value={updatedProfile[field.key] || ""}
-            onChange={(e) => handleFieldChange(field.key, e.target.value)}
-            min={0}
-            placeholder={`Enter ${field.value}`}
-            disabled={field.key === "noOfFamilyMembers"}
-            className="border-0 rounded-end"
-            style={{ 
-              boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)", 
-              width: "100%",
-              backgroundColor: field.key === "noOfFamilyMembers" ? "#f3f4f6" : "white"
-            }}
-          />
-          {errors[field.key] && (
-            <div className="text-danger mt-1" style={{ fontSize: "0.8rem" }}>
-              {errors[field.key]}
-            </div>
-          )}
-        </div>
-      </Form.Group>
-    ));
+    return familyFields.map((field, index) => {
+      // Father Occupation dropdown
+      if (field.key === "fatherOccupation") {
+        return (
+          <Form.Group key={index} className="mb-4">
+            <Form.Label className="font-weight-bold">{field.value}</Form.Label>
+            <Form.Select
+              value={updatedProfile[field.key] || ""}
+              onChange={(e) => handleFieldChange(field.key, e.target.value)}
+              className="border-0 rounded-end"
+              style={{
+                boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+                width: "100%",
+              }}
+            >
+              <option value="">Select</option>
+              {occupationOptions.map((opt) => (
+                <option key={opt} value={opt}>
+                  {opt}
+                </option>
+              ))}
+            </Form.Select>
+
+            {/* Show input if Others is selected */}
+            {updatedProfile[field.key] === "Others" && (
+              <Form.Control
+                type="text"
+                placeholder="Enter custom occupation"
+                value={updatedProfile.customFatherOccupation || ""}
+                onChange={(e) =>
+                  handleFieldChange("customFatherOccupation", e.target.value)
+                }
+                className="mt-2 border-0 rounded-end"
+                style={{ boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)" }}
+              />
+            )}
+
+            {errors[field.key] && (
+              <div className="text-danger mt-1" style={{ fontSize: "0.8rem" }}>
+                {errors[field.key]}
+              </div>
+            )}
+          </Form.Group>
+        );
+      }
+
+      // Mother Occupation dropdown
+      if (field.key === "motherOccupation") {
+        return (
+          <Form.Group key={index} className="mb-4">
+            <Form.Label className="font-weight-bold">{field.value}</Form.Label>
+            <Form.Select
+              value={updatedProfile[field.key] || ""}
+              onChange={(e) => handleFieldChange(field.key, e.target.value)}
+              className="border-0 rounded-end"
+              style={{
+                boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+                width: "100%",
+              }}
+            >
+              <option value="">Select</option>
+              {occupationOptions.map((opt) => (
+                <option key={opt} value={opt}>
+                  {opt}
+                </option>
+              ))}
+            </Form.Select>
+
+            {/* Show input if Others is selected */}
+            {updatedProfile[field.key] === "Others" && (
+              <Form.Control
+                type="text"
+                placeholder="Enter custom occupation"
+                value={updatedProfile.customMotherOccupation || ""}
+                onChange={(e) =>
+                  handleFieldChange("customMotherOccupation", e.target.value)
+                }
+                className="mt-2 border-0 rounded-end"
+                style={{ boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)" }}
+              />
+            )}
+
+            {errors[field.key] && (
+              <div className="text-danger mt-1" style={{ fontSize: "0.8rem" }}>
+                {errors[field.key]}
+              </div>
+            )}
+          </Form.Group>
+        );
+      }
+
+      // Default input for other fields
+      return (
+        <Form.Group key={index} className="mb-4">
+          <Form.Label className="font-weight-bold">{field.value}</Form.Label>
+          <div className="input-group" style={{ flexDirection: "column" }}>
+            <Form.Control
+              type={field.key.includes("noOf") ? "number" : "text"}
+              value={updatedProfile[field.key] || ""}
+              onChange={(e) => handleFieldChange(field.key, e.target.value)}
+              min={0}
+              placeholder={`Enter ${field.value}`}
+              disabled={field.key === "noOfFamilyMembers"}
+              className="border-0 rounded-end"
+              style={{
+                boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+                width: "100%",
+                backgroundColor:
+                  field.key === "noOfFamilyMembers" ? "#f3f4f6" : "white",
+              }}
+            />
+            {errors[field.key] && (
+              <div className="text-danger mt-1" style={{ fontSize: "0.8rem" }}>
+                {errors[field.key]}
+              </div>
+            )}
+          </div>
+        </Form.Group>
+      );
+    });
   };
 
   const convertToPascalCase = (str) => {
@@ -196,6 +319,32 @@ const UserFamilyDetails = ({
   };
 
   const handleFieldChange = (key, value) => {
+    if (key === "fatherOccupation") {
+      setUpdatedProfile((prev) => ({
+        ...prev,
+        fatherOccupation: value,
+        customFatherOccupation: value === "Others" ? prev.customFatherOccupation || "" : "", // reset if not "Others"
+      }));
+      return;
+    }
+
+    if (key === "motherOccupation") {
+      setUpdatedProfile((prev) => ({
+        ...prev,
+        motherOccupation: value,
+        customMotherOccupation: value === "Others" ? prev.customMotherOccupation || "" : "", // reset if not "Others"
+      }));
+      return;
+    }
+
+    if (key === "customFatherOccupation" || key === "customMotherOccupation") {
+      setUpdatedProfile((prev) => ({
+        ...prev,
+        [key]: value,
+      }));
+      return;
+    }
+
     if (key.includes("noOf")) {
       const newValue = parseInt(value) || 0;
       setUpdatedProfile((prevProfile) => {
@@ -213,8 +362,10 @@ const UserFamilyDetails = ({
 
         // Recalculate total family members if brothers or sisters changed
         if (key === "noOfBrothers" || key === "noOfSisters") {
-          const brothers = key === "noOfBrothers" ? newValue : (parseInt(updated.noOfBrothers) || 0);
-          const sisters = key === "noOfSisters" ? newValue : (parseInt(updated.noOfSisters) || 0);
+          const brothers =
+            key === "noOfBrothers" ? newValue : parseInt(updated.noOfBrothers) || 0;
+          const sisters =
+            key === "noOfSisters" ? newValue : parseInt(updated.noOfSisters) || 0;
           const totalFamilyMembers = brothers + sisters + 3; // parents + user
           updated.noOfFamilyMembers = totalFamilyMembers;
 

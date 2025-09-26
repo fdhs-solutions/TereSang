@@ -46,11 +46,20 @@ const LandingPage = () => {
   }, [gender, ageFrom, ageTo, religion, motherTongue]);
 
   useEffect(() => {
-    localStorage.removeItem("userInfo");
+    const data = JSON.parse(localStorage.getItem("userInfo"));
+    if (data) {
+      if (data.data.gender === "male") {
+        setGender("Male");
+      } else if (data.data.gender === "female") {
+        setGender("Female");
+      }
+    }
   }, []);
 
   return (
+
     <>
+
       <section className="main-background-image">
         <div className="overlay"></div>
       </section>
@@ -74,6 +83,7 @@ const LandingPage = () => {
                 onChange={(e) => setGender(e.target.value)}
                 className="mt-1 py-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-pink-600 focus:border-pink-600"
                 required
+                disabled={gender}
               >
                 <option value="">Select</option>
                 <option value="Female">Bride</option>
@@ -211,12 +221,12 @@ const LandingPage = () => {
       <section className="py-10 bg-white px-2">
         <div className="container mx-auto">
           <div className="relative flex justify-center mb-8">
-            {/* <!-- Animated Icons --> */}
+            {/* Animated Icons */}
             <div className="absolute animate-pulse bg-blue-400 rounded-full h-6 w-6 opacity-75"></div>
             <div className="absolute animate-bounce bg-gray-300 rounded-full h-4 w-4 top-0 left-0 opacity-75"></div>
           </div>
           <div className="flex flex-col lg:flex-row items-center justify-between">
-            {/* <!-- Content Column --> */}
+            {/* Content Column */}
             <div className="w-full lg:w-1/2 mb-8 lg:mb-0 px-4">
               <div>
                 <div className="mb-6">
@@ -224,21 +234,29 @@ const LandingPage = () => {
                     ABOUT US
                   </span>
                   <h2 className="text-3xl font-bold text-gray-800 mb-4">
-                    Welcome to the TereSang
+                    Welcome to <span className="text-pink-600">TereSang</span>
                   </h2>
-                  <p className="text-gray-600 mb-4">
-                    Ready Matrimonial provides decent Matrimonial PHP Script in
-                    various design templates at a reasonable price. It is also
-                    available in Android &amp; iOS versions.
+                  <p className="text-gray-600 mb-4 leading-relaxed">
+                    TereSang is a trusted matrimonial platform committed to helping
+                    individuals and families find their perfect life partners.
+                    With a blend of tradition and technology, we bring you a safe,
+                    private, and reliable matchmaking experience tailored to your
+                    preferences.
+                  </p>
+                  <p className="text-gray-600 mb-4 leading-relaxed">
+                    Whether you are looking for a partner based on religion, language,
+                    profession, or lifestyle, our advanced matching system ensures
+                    that you connect with the most compatible profiles.
                   </p>
                 </div>
                 <ul className="list-disc pl-5 mb-6 text-gray-600">
-                  <li className="mb-2">Profile with fully updated details</li>
-                  <li className="mb-2">Multiple &amp; easy ways to contact</li>
-                  <li className="mb-2">Automatic Matching System</li>
-                  <li>Easy &amp; flexible navigations</li>
+                  <li className="mb-2">Verified profiles with updated details</li>
+                  <li className="mb-2">Personalized matchmaking filters</li>
+                  <li className="mb-2">Private &amp; secure communication</li>
+                  <li className="mb-2">Dedicated customer support team</li>
+                  <li>Mobile-friendly, easy-to-use experience</li>
                 </ul>
-                <div className="text-center py-5">
+                <div className="text-center py-3">
                   <Link
                     to="/register"
                     className="inline-block text-white bg-pink-600 hover:bg-pink-700 font-semibold rounded transition duration-300"
@@ -249,13 +267,13 @@ const LandingPage = () => {
                 </div>
               </div>
             </div>
-            {/* <!-- Image Column --> */}
+            {/* Image Column */}
             <div className="w-full lg:w-1/2 px-4 hidden sm:block">
               <div className="flex justify-center">
                 <img
                   className="rounded-lg shadow-lg w-full"
-                  src="https://images.pexels.com/photos/11652315/pexels-photo-11652315.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                  alt="About Us Image"
+                  src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                  alt="About Us"
                 />
               </div>
             </div>
@@ -380,7 +398,71 @@ const LandingPage = () => {
           </div>
         </div>
       </section>
-      {/* Custom Footer */}
+
+      {/* Help Section */}
+      <section className="py-12 bg-gray-50 px-3">
+        <div className="container mx-auto">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">
+              Need <span className="text-pink-600">Help?</span>
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
+              We are here to guide you at every step of your matrimonial journey.
+              Whether you need help creating your profile, finding matches, or
+              understanding our services, our support team is just a click away.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-4">
+            {/* Card 1 */}
+            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 text-center">
+              <div className="text-pink-600 mb-4">
+                <i className="fas fa-user-circle text-4xl"></i>
+              </div>
+              <h4 className="text-lg font-semibold mb-2">Profile Assistance</h4>
+              <p className="text-gray-600 text-sm">
+                Need help in setting up or updating your profile?
+                Our team will ensure your profile stands out.
+              </p>
+            </div>
+
+            {/* Card 2 */}
+            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 text-center">
+              <div className="text-green-500 mb-4">
+                <i className="fas fa-comments text-4xl"></i>
+              </div>
+              <h4 className="text-lg font-semibold mb-2">Matchmaking Guidance</h4>
+              <p className="text-gray-600 text-sm">
+                Get personalized tips and suggestions to find your
+                most compatible partner quickly and safely.
+              </p>
+            </div>
+
+            {/* Card 3 */}
+            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 text-center">
+              <div className="text-blue-500 mb-4">
+                <i className="fas fa-headset text-4xl"></i>
+              </div>
+              <h4 className="text-lg font-semibold mb-2">24/7 Support</h4>
+              <p className="text-gray-600 text-sm">
+                Our customer support team is available round-the-clock
+                to assist you with any queries or concerns.
+              </p>
+            </div>
+          </div>
+
+          <div className="text-center mt-8">
+            <a
+              href="mailto:fdhssolution@gmail.com"
+              className="inline-block bg-pink-600 hover:bg-pink-700 text-white font-semibold rounded transition duration-300"
+              style={{ padding: "12px 28px", textDecoration: "none" }}
+            >
+              Contact Support
+            </a>
+          </div>
+        </div>
+      </section>
+
       <div className="footer-custom bg-gray-100 py-4 text-center border-t border-gray-300">
         <div className="text-sm text-dark-900">
           &copy; {new Date().getFullYear()}
@@ -398,7 +480,9 @@ const LandingPage = () => {
           Made with ❤️
         </div>
       </div>
+
     </>
+
   );
 };
 

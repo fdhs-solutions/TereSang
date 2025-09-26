@@ -33,6 +33,19 @@ const locationOptions = [
   { value: "Nagpur", label: "Nagpur" },
 ];
 
+const familyStatusOptions = [
+  { value: "Middle Class", label: "Middle Class" },
+  { value: "Upper Middle Class", label: "Upper Middle Class" },
+  { value: "Doesn’t Matter", label: "Doesn’t Matter" },
+];
+
+const familyValueOptions = [
+  { value: "Moderate", label: "Moderate" },
+  { value: "Traditional", label: "Traditional" },
+  { value: "Doesn’t Matter", label: "Doesn’t Matter" },
+];
+
+
 const UserPartnerPreferences = ({
   response,
   refresAfterUpdate,
@@ -166,6 +179,7 @@ const UserPartnerPreferences = ({
   }, [response]);
 
   return (
+
     <div className="bg-white p-6 rounded-lg shadow-lg mb-5">
       <CardContainer
         initial={{ opacity: 0, x: -100 }}
@@ -253,8 +267,8 @@ const UserPartnerPreferences = ({
                         value={
                           updatedProfile[field.key]
                             ? updatedProfile[field.key]
-                                .split(",")
-                                .map((value) => ({ label: value, value }))
+                              .split(",")
+                              .map((value) => ({ label: value, value }))
                             : []
                         }
                         onChange={(selectedOptions) => {
@@ -278,16 +292,16 @@ const UserPartnerPreferences = ({
                               ...dynamicLocations, // Include dynamic locations in the options
                               ...(updatedProfile.customLocations
                                 ? updatedProfile.customLocations.map((loc) => ({
-                                    value: loc,
-                                    label: loc,
-                                  }))
+                                  value: loc,
+                                  label: loc,
+                                }))
                                 : []),
                             ]}
                             value={
                               updatedProfile[field.key]
                                 ? updatedProfile[field.key]
-                                    .split(",")
-                                    .map((value) => ({ label: value, value }))
+                                  .split(",")
+                                  .map((value) => ({ label: value, value }))
                                 : []
                             }
                             onChange={(selectedOptions) => {
@@ -318,9 +332,8 @@ const UserPartnerPreferences = ({
                                 const updatedLocations = updatedProfile[
                                   field.key
                                 ]
-                                  ? `${
-                                      updatedProfile[field.key]
-                                    },${newLocation}`
+                                  ? `${updatedProfile[field.key]
+                                  },${newLocation}`
                                   : newLocation;
                                 handleFieldChange(field.key, updatedLocations);
                                 setDynamicLocations((prevLocations) => [
@@ -354,20 +367,56 @@ const UserPartnerPreferences = ({
                         </div>
                       </div>
                     ) : (
-                      <Form.Control
-                        type="text"
-                        value={updatedProfile[field.key] || ""}
-                        onChange={(e) =>
-                          handleFieldChange(field.key, e.target.value)
-                        }
-                        placeholder={`Enter ${field.value}`}
-                        className="border-0 rounded-end"
-                        style={{
-                          boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
-                          width: "100%",
-                          marginLeft: "5px",
-                        }}
-                      />
+                      field.key === "familyStatus" ? (
+                        <Form.Select
+                          value={updatedProfile[field.key] || ""}
+                          onChange={(e) => handleFieldChange(field.key, e.target.value)}
+                          className="border-0 rounded-end"
+                          style={{
+                            boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+                            width: "100%",
+                          }}
+                        >
+                          <option value="">Select Family Status</option>
+                          {familyStatusOptions.map((opt) => (
+                            <option key={opt.value} value={opt.value}>
+                              {opt.label}
+                            </option>
+                          ))}
+                        </Form.Select>
+                      ) : field.key === "familyValue" ? (
+                        <Form.Select
+                          value={updatedProfile[field.key] || ""}
+                          onChange={(e) => handleFieldChange(field.key, e.target.value)}
+                          className="border-0 rounded-end"
+                          style={{
+                            boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+                            width: "100%",
+                          }}
+                        >
+                          <option value="">Select Family Values</option>
+                          {familyValueOptions.map((opt) => (
+                            <option key={opt.value} value={opt.value}>
+                              {opt.label}
+                            </option>
+                          ))}
+                        </Form.Select>
+                      ) : (
+                        <Form.Control
+                          type="text"
+                          value={updatedProfile[field.key] || ""}
+                          onChange={(e) =>
+                            handleFieldChange(field.key, e.target.value)
+                          }
+                          placeholder={`Enter ${field.value}`}
+                          className="border-0 rounded-end"
+                          style={{
+                            boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+                            width: "100%",
+                            marginLeft: "5px",
+                          }}
+                        />
+                      )
                     )}
 
                     {errors[field.key] && (
@@ -422,6 +471,7 @@ const UserPartnerPreferences = ({
         </Modal>
       </CardContainer>
     </div>
+
   );
 };
 

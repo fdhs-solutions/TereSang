@@ -45,12 +45,11 @@ function Navbar() {
   return (
     <>
       <nav
-        className={`navbar navbar-expand-lg ${
-          session ? "nav-bg-white" : "nav-bg-transparent"
-        }`}
+        className={`navbar navbar-expand-lg ${session ? "nav-bg-white" : "nav-bg-transparent"
+          }`}
       >
         <div className="container">
-          <div className="navbar-brand">TereSang</div>
+          <Link to={"/"} className="navbar-brand">TereSang</Link>
           {/* Hamburger icon for mobile */}
           <button className="navbar-toggler" onClick={() => setMenuOpen(true)}>
             <GiHamburgerMenu className="navbar-toggler-icon" />
@@ -71,9 +70,8 @@ function Navbar() {
                 </li>
                 <li className="nav-item">
                   <Link
-                    className={`nav-link ${
-                      activeLink === "/login" ? "active" : ""
-                    }`}
+                    className={`nav-link ${activeLink === "/login" ? "active" : ""
+                      }`}
                     to="/login"
                     onClick={() => handleNavigation("/login")}
                   >
@@ -82,9 +80,8 @@ function Navbar() {
                 </li>
                 <li className="nav-item">
                   <Link
-                    className={`nav-link ${
-                      activeLink === "/register" ? "active" : ""
-                    }`}
+                    className={`nav-link ${activeLink === "/register" ? "active" : ""
+                      }`}
                     to="/register"
                     onClick={() => handleNavigation("/register")}
                   >
@@ -96,9 +93,8 @@ function Navbar() {
               <>
                 <li className="nav-item">
                   <button
-                    className={`nav-link ${
-                      activeLink === "/profile" ? "active" : ""
-                    }`}
+                    className={`nav-link ${activeLink === "/profile" ? "active" : ""
+                      }`}
                     onClick={() =>
                       handleNavigation(`/all-details/${session.mobileNumber}`)
                     }
@@ -108,9 +104,8 @@ function Navbar() {
                 </li>
                 <li className="nav-item">
                   <button
-                    className={`nav-link ${
-                      activeLink === "/profiles" ? "active" : ""
-                    }`}
+                    className={`nav-link ${activeLink === "/profiles" ? "active" : ""
+                      }`}
                     onClick={() => handleNavigation("/profiles")}
                   >
                     Dashboard
@@ -118,9 +113,8 @@ function Navbar() {
                 </li>
                 <li className="nav-item">
                   <button
-                    className={`nav-link ${
-                      activeLink === "/change-password" ? "active" : ""
-                    }`}
+                    className={`nav-link ${activeLink === "/change-password" ? "active" : ""
+                      }`}
                     onClick={() => handleNavigation("/change-password")}
                   >
                     Change Password
@@ -155,9 +149,8 @@ function Navbar() {
               </li>
               <li>
                 <span
-                  className={`mobile-link ${
-                    activeLink === "/login" ? "active" : ""
-                  }`}
+                  className={`mobile-link ${activeLink === "/login" ? "active" : ""
+                    }`}
                   onClick={() => handleNavigation("/login")}
                 >
                   Login
@@ -165,9 +158,8 @@ function Navbar() {
               </li>
               <li>
                 <span
-                  className={`mobile-link ${
-                    activeLink === "/register" ? "active" : ""
-                  }`}
+                  className={`mobile-link ${activeLink === "/register" ? "active" : ""
+                    }`}
                   onClick={() => handleNavigation("/register")}
                 >
                   Register
@@ -178,9 +170,8 @@ function Navbar() {
             <>
               <li>
                 <span
-                  className={`mobile-link ${
-                    activeLink === "/profile" ? "active" : ""
-                  }`}
+                  className={`mobile-link ${activeLink === "/profile" ? "active" : ""
+                    }`}
                   onClick={() =>
                     handleNavigation(`/all-details/${session.mobileNumber}`)
                   }
@@ -190,9 +181,8 @@ function Navbar() {
               </li>
               <li>
                 <span
-                  className={`mobile-link ${
-                    activeLink === "/profiles" ? "active" : ""
-                  }`}
+                  className={`mobile-link ${activeLink === "/profiles" ? "active" : ""
+                    }`}
                   onClick={() => handleNavigation("/profiles")}
                 >
                   Dashboard
@@ -200,9 +190,8 @@ function Navbar() {
               </li>
               <li>
                 <span
-                  className={`mobile-link ${
-                    activeLink === "/change-password" ? "active" : ""
-                  }`}
+                  className={`mobile-link ${activeLink === "/change-password" ? "active" : ""
+                    }`}
                   onClick={() => handleNavigation("/change-password")}
                 >
                   Change Password
