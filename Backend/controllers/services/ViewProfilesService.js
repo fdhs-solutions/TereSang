@@ -17,7 +17,9 @@ export const getAllProfilesService = async ({
 
   const whereClause = {};
   if (gender) {
-    whereClause.gender = gender; // filter by specified gender
+    whereClause.gender = {
+      [Op.ne]: gender, // not equal to logged-in user gender
+    };
   }
 
   const { rows, count } = await UserRegistrationProfile.findAndCountAll({
