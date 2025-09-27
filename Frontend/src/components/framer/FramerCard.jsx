@@ -47,7 +47,7 @@ const FramerCard = () => {
   const pageSize = 10;
 
   const session = AuthHook();
-  console.log(session);
+  // console.log(session);
   
   const userGender = session?.gender || "";
 
